@@ -1,0 +1,24 @@
+@reference "tailwindcss";
+@tailwind utilities;
+
+@layer utilities {
+	@keyframes pulse-red {
+		0% {
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6);
+		}
+		70% {
+			transform: scale(1);
+			box-shadow: 0 0 0 20px rgba(211, 47, 47, 0);
+		}
+		100% {
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+		}
+	}
+
+	.pulse-icon {
+		@apply relative w-[20px] h-[20px] bg-[#d32f2f] rounded-full shadow-[0_0_10px_rgba(211,47,47,0.7)];
+		animation: pulse-red 2s infinite;
+	}
+}

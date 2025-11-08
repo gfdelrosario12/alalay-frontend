@@ -1,0 +1,31 @@
+@reference "tailwindcss";
+
+.header-container {
+	@apply z-[1000] fixed top-0 left-0 flex bg-[var(--color-main)] font-sans text-[var(--color-white)] w-full min-h-[18vh] items-center justify-between p-4 pt-10;
+}
+
+.header-text {
+	@apply flex flex-col h-full justify-between;
+}
+.upper {
+	@apply h-[80%] mb-3;
+}
+.upper h2 {
+	@apply text-lg font-medium mb-0 pb-0;
+}
+
+.upper p {
+	@apply text-sm font-light mt-0 pt-0;
+}
+
+.date {
+	@apply text-sm font-light;
+}
+
+.date span {
+	@apply mr-3;
+}
+
+.header-icon img {
+	@apply rounded-full;
+}

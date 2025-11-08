@@ -1,0 +1,29 @@
+@reference "tailwindcss";
+
+.resident-nav-container {
+	@apply z-[1000] fixed bottom-0 left-0 flex w-full h-[10vh] bg-[var(--color-red)] font-sans text-[#fafafa] items-center justify-evenly px-1 py-4;
+}
+
+.resident-nav-container ul {
+	@apply flex w-full h-full justify-evenly items-center;
+}
+
+.resident-nav-container ul li a {
+	@apply list-none text-center flex flex-col items-center justify-center font-medium;
+}
+
+/* Special style for Maps image */
+.maps-img {
+	@apply bg-[#fafafa] rounded-full w-[72px] h-[72px] -mt-14 mb-2 p-4 shadow-md border-2 border-[#b71c1c];
+}
+
+/* Maps background color if active */
+
+.maps-img.active {
+	@apply bg-[#ffb300];
+}
+
+/* Active link color */
+.resident-nav-container ul li span.active {
+	@apply text-[#ffb300];
+}

@@ -1,0 +1,25 @@
+@reference "tailwindcss";
+
+.modal {
+	@apply font-sans fixed inset-0 bg-black/40 flex items-center justify-center z-50;
+}
+
+.modal-overlay {
+	@apply bg-[var(--color-gray)] rounded-2xl shadow-xl p-6 w-[90%] max-w-md text-center;
+}
+
+.modal-title {
+	@apply text-xl font-semibold text-gray-800 mb-2;
+}
+
+.modal-description {
+	@apply text-gray-600 mb-6;
+}
+
+.modal-buttons {
+	@apply flex justify-between gap-3;
+}
+
+.modal-cancel-btn {
+	@apply flex-1 py-2 rounded-lg bg-[var(--color-white)] hover:bg-gray-300 text-gray-700 font-medium transition;
+}

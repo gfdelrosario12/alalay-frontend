@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+.resident-map-container {
+	@apply flex flex-col w-full h-full justify-between;
+}
+
+.map {
+	@apply w-full h-[60%];
+}

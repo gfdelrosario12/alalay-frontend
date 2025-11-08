@@ -1,0 +1,49 @@
+@reference "tailwindcss";
+
+.resident-map-status {
+	@apply z-50 fixed bottom-[10vh] left-0 font-sans bg-[var(--color-gray)] h-[24vh] flex flex-col justify-center items-center w-full p-4 rounded-lg text-center rounded-t-3xl shadow-[0_-3px_15px_rgba(0,0,0,0.3)];
+}
+
+.status-header {
+	@apply h-[50%] flex flex-col justify-center items-center w-full;
+}
+
+.status-title {
+	@apply mb-0;
+}
+
+.status-title h2 {
+	@apply font-semibold text-2xl mb-0;
+}
+
+.status-safe {
+	@apply text-[var(--color-green)] drop-shadow-[0_0_7px_rgba(56,142,60,0.75)];
+}
+
+.status-help {
+	@apply text-[var(--color-red)] drop-shadow-[0_0_7px_rgba(211,47,47,1)];
+}
+
+.status-awaiting {
+	@apply text-[var(--color-yellow)] drop-shadow-[0_0_7px_rgba(255,179,0,1)];
+}
+
+.status-title p {
+	@apply text-sm font-light;
+}
+
+.status-buttons {
+	@apply min-w-[80%] h-[50%] p-0 m-auto flex items-center justify-between;
+}
+
+.status-buttons button {
+	@apply px-4 py-2 text-[#fafafa] rounded-lg;
+}
+
+.status-buttons .mark-safe {
+	@apply bg-[#388e3c];
+}
+
+.status-buttons .mark-help {
+	@apply bg-[#b71c1c];
+}

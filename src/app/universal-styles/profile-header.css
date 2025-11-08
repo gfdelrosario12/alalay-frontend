@@ -1,0 +1,45 @@
+@reference "tailwindcss";
+
+.profile-header {
+	@apply font-sans tracking-wide flex flex-col w-full min-h-[30vh] justify-center items-center space-y-4 px-4 py-6;
+}
+
+.profile-header.resident {
+	@apply bg-[var(--color-red)] text-[var(--color-white)];
+}
+
+.profile-header.rescuer {
+	@apply bg-[var(--color-blue)] text-[var(--color-white)];
+}
+
+.header-title {
+	@apply flex flex-col justify-center items-center pb-3;
+}
+
+.header-title h2 {
+	@apply text-4xl font-semibold;
+}
+
+.header-title p {
+	@apply text-lg first-letter:uppercase;
+}
+
+.profile-picture img {
+	@apply w-[110px] h-[110px] rounded-full object-cover border-3 border-white shadow-lg;
+}
+
+.user-information {
+	@apply text-center;
+}
+
+.user-information h5 {
+	@apply font-normal text-xl;
+}
+
+.user-information p {
+	@apply font-light text-[16px];
+}
+
+.user-id {
+	@apply flex justify-center items-center space-x-2;
+}
