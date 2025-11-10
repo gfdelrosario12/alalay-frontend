@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+.profile-link button {
+	@apply font-sans w-full flex gap-4 py-4 border-b items-center px-3;
+}
+
+.profile-link button img {
+	@apply w-auto h-auto;
+}
+
+.profile-link button p {
+	@apply font-normal text-lg tracking-wide;
+}

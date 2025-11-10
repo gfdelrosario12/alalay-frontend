@@ -13,7 +13,11 @@
 }
 
 .resident-people-link .refresh {
-	@apply flex gap-2;
+	@apply flex gap-2 items-center;
+}
+
+.refresh img {
+	@apply w-auto h-auto;
 }
 
 .resident-people-cards {

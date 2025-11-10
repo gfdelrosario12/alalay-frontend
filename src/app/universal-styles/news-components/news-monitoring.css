@@ -1,0 +1,33 @@
+@reference "tailwindcss";
+
+.monitoring-card {
+	@apply font-sans flex flex-col gap-4 pt-4 pb-2 px-4 bg-[var(--color-gray)] rounded-lg shadow-md;
+}
+
+.monitoring-header {
+	@apply w-full flex justify-between;
+}
+
+.monitoring-header p {
+	@apply font-light text-xs;
+}
+
+.monitoring-description {
+	@apply flex flex-col gap-5;
+}
+
+.monitoring-description p {
+	@apply font-normal text-[14px];
+}
+
+.monitoring-description button {
+	@apply font-light text-left text-xs underline hover:underline transition;
+}
+
+.monitoring-add-information {
+	@apply overflow-hidden transition-all duration-300;
+}
+
+.monitoring-add-information p {
+	@apply mb-2;
+}

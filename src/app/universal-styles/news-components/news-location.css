@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+.location-container {
+	@apply flex gap-4 bg-[var(--color-gray)] py-2 px-4 rounded-lg;
+}
+
+.location-container img {
+	@apply opacity-75;
+}

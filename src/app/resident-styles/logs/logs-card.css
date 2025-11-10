@@ -1,0 +1,38 @@
+@reference "tailwindcss";
+
+.logs-card {
+	@apply flex flex-col p-3 font-sans text-[14px] bg-[var(--color-gray)] gap-4 rounded-lg shadow-lg;
+}
+
+.card-top {
+	@apply flex justify-between;
+}
+
+.logs-date {
+	@apply w-[50%] flex flex-col gap-1;
+}
+
+.logs-time,
+.logs-status {
+	@apply w-[25%] flex flex-col gap-1;
+}
+
+p {
+	@apply font-semibold;
+}
+
+.card-bottom {
+	@apply w-full flex justify-between;
+}
+
+.logs-address {
+	@apply w-[70%];
+}
+
+.logs-button {
+	@apply w-[30%] flex justify-end items-end;
+}
+
+.logs-button button {
+	@apply py-2 px-3 bg-[var(--color-red)] text-[var(--color-white)] rounded-md;
+}

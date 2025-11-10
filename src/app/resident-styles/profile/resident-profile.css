@@ -1,0 +1,5 @@
+@reference "tailwindcss";
+
+.resident-profile-container {
+	@apply fixed top-[45vh] left-0 w-full py-8 px-4;
+}

@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import Image, { StaticImageData } from 'next/image';
 import '../universal-styles/people-card.css';
+import DeleteModal from './delete-modal';
 
 type PeopleCardProps = {
 	residentName: string;
@@ -22,25 +23,15 @@ export default function PeopleCard({
 	residentAvatar,
 }: PeopleCardProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
-	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
 	const toggleAdditionalInfo = () => {
 		setIsExpanded(!isExpanded);
 	};
 
-	const handleDeleteClick = (e: React.MouseEvent) => {
-		e.stopPropagation(); // prevent triggering expand/collapse
-		setShowDeleteConfirm(true);
-	};
-
-	// Change the console.log to the deletion of contact
-	const confirmDelete = () => {
-		setShowDeleteConfirm(false);
-		console.log('Contact Deleted');
-	};
-
-	const cancelDelete = () => {
-		setShowDeleteConfirm(false);
+	// This will be called when user confirms delete
+	const handleConfirmDelete = () => {
+		console.log(`Contact with UID ${residentId} deleted`);
+		// Replace the main logic for deleting the contact
 	};
 
 	// CSS Class for different statuses
@@ -96,34 +87,15 @@ export default function PeopleCard({
 						</div>
 					</div>
 					<div className='add-info-btn'>
-						<button onClick={handleDeleteClick}>Delete Contact</button>
+						<DeleteModal
+							title='Delete Contact'
+							description='Are you sure you want to delete this contact? This action cannot be undone.'
+							onConfirm={handleConfirmDelete}
+							triggerText='Delete Contact'
+						/>
 					</div>
 				</div>
 			</div>
-			{/* DELETE CONFIRMATION MODAL */}
-			{showDeleteConfirm && (
-				<div className='delete-modal'>
-					<div className='delete-modal-overlay'>
-						<h2>Confirm Deletion</h2>
-						<p>
-							Are you sure you want to delete this contact? This action cannot
-							be undone.
-						</p>
-						<div className='delete-modal-buttons'>
-							<button
-								onClick={confirmDelete}
-								className='confirm-btn'>
-								Yes, Delete
-							</button>
-							<button
-								onClick={cancelDelete}
-								className='cancel-btn'>
-								Cancel
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
 		</>
 	);
 }

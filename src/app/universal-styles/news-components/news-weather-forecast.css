@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+.weather-forecast-card {
+	@apply font-sans bg-[var(--color-gray)] py-3 px-5 rounded-lg text-center shadow-md;
+}
+
+.forecast-description span {
+	@apply font-extralight;
+}
+
+.forecast-description p {
+	@apply text-xl font-medium;
+}

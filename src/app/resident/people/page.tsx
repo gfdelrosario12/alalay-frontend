@@ -41,7 +41,6 @@ export default function ResidentPeople() {
 						/>
 					</Link>
 				</div>
-				{/* Placeholder for now */}
 				<div className='resident-people-cards'>
 					<PeopleCard
 						residentName='Luke Chiang'

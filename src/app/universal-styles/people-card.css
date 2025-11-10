@@ -1,17 +1,21 @@
 @reference "tailwindcss";
 .resident-people-card {
-	@apply flex flex-col font-sans bg-[var(--color-gray)] rounded-lg shadow-md w-[90%] p-4 transition-all duration-300;
+	@apply flex flex-col font-sans text-[14px] bg-[var(--color-gray)] rounded-lg shadow-md w-[90%] p-4 transition-all duration-300;
 }
 
 .people-info {
 	@apply flex gap-2 justify-between items-center font-medium;
 }
 
+.people-info p {
+	@apply font-normal;
+}
+
 .people-info .image-card img {
 	@apply w-14 h-14 rounded-full overflow-hidden;
 }
 
-.uid {
+.additional-info .uid {
 	@apply flex gap-2 mt-1 font-normal;
 }
 
@@ -43,64 +47,16 @@
 	@apply text-[var(--color-black)];
 }
 
-.content-left h2,
-.content-right h2 {
+.add-info-content .content-left h2,
+.add-info-content .content-right h2 {
 	@apply font-semibold;
 }
 
-.content-left p,
-.content-right p {
+.add-info-content .content-left p,
+.add-info-content .content-right p {
 	@apply font-normal;
 }
 
-.add-info-btn {
-	@apply mt-4 w-full;
-}
-
-.add-info-btn button {
-	@apply w-full bg-[var(--color-red)] text-[var(--color-white)] py-2 rounded-md hover:bg-red-600 transition-colors duration-300;
-}
-
-.delete-modal {
-	@apply fixed inset-0 flex items-center justify-center bg-black/40 z-50;
-}
-
-.delete-modal-overlay {
-	@apply bg-[var(--color-gray)] rounded-xl shadow-xl p-6 w-[90%] max-w-sm text-center;
-	animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: scale(0.95);
-	}
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-.animate-fadeIn {
-	animation: fadeIn 0.2s ease-out;
-}
-
-.delete-modal-overlay h2 {
-	@apply text-lg font-semibold text-gray-800 mb-2;
-}
-
-.delete-modal-overlay p {
-	@apply text-gray-600 mb-6;
-}
-
-.delete-modal-buttons {
-	@apply flex justify-center gap-3;
-}
-
-.confirm-btn {
-	@apply px-4 py-2 bg-[var(--color-red)] hover:bg-red-600 text-white rounded-lg font-medium transition;
-}
-
-.cancel-btn {
-	@apply px-4 py-2 bg-[var(--color-white)] hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition;
+.add-info-content .add-info-btn {
+	@apply mt-4 w-full bg-[var(--color-red)] text-[var(--color-white)] py-2 rounded-md hover:bg-red-600 transition-colors duration-300 text-center;
 }
