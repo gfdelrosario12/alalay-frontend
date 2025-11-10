@@ -1,6 +1,7 @@
 // app/page.tsx
 'use client';
-import ResidentMap from './resident/maps/page';
+import GetStarted from './get-started';
+import RescuerMap from './resident/maps/page';
 import { useRoleTheme } from './ThemeProvider/ThemeProvider';
 import { useEffect } from 'react';
 
@@ -11,5 +12,5 @@ export default function Home() {
 		setRole('resident');
 	}, [setRole]);
 
-	return <ResidentMap />;
+	return <RescuerMap />;
 }

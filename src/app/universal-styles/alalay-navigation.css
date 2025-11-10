@@ -1,7 +1,7 @@
 @reference "tailwindcss";
 
 .resident-nav-container {
-	@apply z-[1000] fixed bottom-0 left-0 flex w-full h-[10vh] bg-[var(--color-red)] font-sans text-[#fafafa] items-center justify-evenly px-1 py-4;
+	@apply z-[1000] fixed bottom-0 left-0 flex w-full h-[10vh] bg-[var(--color-main)] font-sans text-[#fafafa] items-center justify-evenly px-1 py-4;
 }
 
 .resident-nav-container ul {
@@ -14,7 +14,7 @@
 
 /* Special style for Maps image */
 .maps-img {
-	@apply bg-[#fafafa] rounded-full w-[72px] h-[72px] -mt-14 mb-2 p-4 shadow-md border-2 border-[#b71c1c];
+	@apply bg-[#fafafa] rounded-full w-[72px] h-[72px] -mt-14 mb-2 p-4 shadow-md border-2 border-[var(--color-main)];
 }
 
 /* Maps background color if active */

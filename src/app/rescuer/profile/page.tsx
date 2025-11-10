@@ -23,7 +23,7 @@ export default function RescuerProfile() {
 		<>
 			{/* Header for the Profile */}
 			<ProfileHeader
-				role='resident'
+				role='rescuer'
 				username='Juan A. Dela Cruz'
 				city='Quezon City'
 				residentId='R12345'
@@ -48,7 +48,7 @@ export default function RescuerProfile() {
 				/>
 			</div>
 			{/* Navigation Bar */}
-			<AlalayNavigation role='resident' />
+			<AlalayNavigation role='rescuer' />
 
 			{/* Modal Form for Editing User Profile */}
 			<EditModalForm

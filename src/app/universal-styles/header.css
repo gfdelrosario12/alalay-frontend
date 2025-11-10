@@ -1,7 +1,7 @@
 @reference "tailwindcss";
 
 .header-container {
-	@apply z-[1000] fixed top-0 left-0 flex bg-[var(--color-main)] font-sans text-[var(--color-white)] w-full min-h-[18vh] items-center justify-between p-4 pt-10;
+	@apply z-[1000] fixed top-0 left-0 flex bg-[var(--color-main)] font-sans text-[var(--color-white)] w-full min-h-[18vh] md:min-h-[16vh] items-center justify-between p-4 pt-10 md:p-4;
 }
 
 .header-text {

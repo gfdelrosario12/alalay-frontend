@@ -12,7 +12,7 @@
 }
 
 .people-info .image-card img {
-	@apply w-14 h-14 rounded-full overflow-hidden;
+	@apply w-auto h-auto rounded-full overflow-hidden;
 }
 
 .additional-info .uid {
@@ -57,6 +57,6 @@
 	@apply font-normal;
 }
 
-.add-info-content .add-info-btn {
+.add-info-btn {
 	@apply mt-4 w-full bg-[var(--color-red)] text-[var(--color-white)] py-2 rounded-md hover:bg-red-600 transition-colors duration-300 text-center;
 }

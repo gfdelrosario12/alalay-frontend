@@ -1,8 +1,7 @@
 import Header from '../../universal-components/header';
 import AlalayNavigation from '../../universal-components/alalay-navigation';
-import LogsCard from '../../resident-components/logs/logs-card';
-
-import '../../resident-styles/logs/resident-logs.css';
+import RescuerLogCard from '@/app/rescuer-components/logs/rescuer-log-card';
+import '../../rescuer-styles/logs/rescuer-logs.css';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -12,14 +11,14 @@ export default function RescuerLogs() {
 		<>
 			{/* Header for the Logs */}
 			<Header
-				title='Personal Logs'
-				subtitle="Here's your logs overview"
+				title='Resident Logs'
+				subtitle='Check all the logs from the residents'
 				date='December 25, 2025'
 				time='10:30 AM'
 				image='/images/header-icon.jpg'
 			/>
-			<div className='resident-logs-container'>
-				<div className='resident-logs-header'>
+			<div className='rescuer-logs-container'>
+				<div className='rescuer-logs-header'>
 					<p>All Status Logs</p>
 					<Link
 						href=''
@@ -35,34 +34,31 @@ export default function RescuerLogs() {
 				</div>
 				{/* Placeholder for now */}
 				<div className='logs'>
-					<LogsCard
+					<RescuerLogCard
+						residentName='Niki Zefanya'
 						logsDate='December 25, 2025'
 						logsTime='08:08 PM'
-						logsStatus='Monitoring'
+						logsStatus='monitoring'
 						logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
 					/>
-					<LogsCard
+					<RescuerLogCard
+						residentName='Luke Chiang'
 						logsDate='December 25, 2025'
 						logsTime='08:08 PM'
-						logsStatus='Monitoring'
+						logsStatus='safe'
 						logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
 					/>
-					<LogsCard
+					<RescuerLogCard
+						residentName='Niki Zefanya'
 						logsDate='December 25, 2025'
 						logsTime='08:08 PM'
-						logsStatus='Monitoring'
-						logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
-					/>
-					<LogsCard
-						logsDate='December 25, 2025'
-						logsTime='08:08 PM'
-						logsStatus='Monitoring'
+						logsStatus='not safe'
 						logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
 					/>
 				</div>
 			</div>
 			{/* Navigation Bar */}
-			<AlalayNavigation role='resident' />
+			<AlalayNavigation role='rescuer' />
 		</>
 	);
 }

@@ -1,7 +1,7 @@
 import NewsLocation from '@/app/universal-components/news-components/news-location';
 import Header from '../../universal-components/header';
 import AlalayNavigation from '../../universal-components/alalay-navigation';
-import '../../resident-styles/news/resident-news.css';
+import '../../rescuer-styles/news/rescuer-news.css';
 import NewsWeatherForecast from '@/app/universal-components/news-components/news-weather-forecast';
 import NewsMonitoringCard from '@/app/universal-components/news-components/news-monitoring';
 
@@ -16,7 +16,7 @@ export default function RescuerNews() {
 				time='10:30 AM'
 				image='/images/header-icon.jpg'
 			/>
-			<div className='resident-news-container'>
+			<div className='rescuer-news-container'>
 				{/* Display the current location of the user */}
 				<div className='top-part'>
 					<div className='news-location'>
@@ -79,7 +79,7 @@ export default function RescuerNews() {
 				</div>
 			</div>
 			{/* Navigation Bar */}
-			<AlalayNavigation role='resident' />
+			<AlalayNavigation role='rescuer' />
 		</>
 	);
 }

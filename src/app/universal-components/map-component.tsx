@@ -28,37 +28,59 @@ const createIcon = (color: string) =>
 		popupAnchor: [0, -48],
 	});
 
-interface Friend {
+export interface Resident {
 	residentName: string;
 	residentStatus: 'safe' | 'monitoring' | 'unsafe';
 	residentLocation: LatLngExpression;
 }
 
-export default function MapComponent() {
+interface MapComponentProps {
+	role: 'resident' | 'rescuer';
+}
+
+export default function MapComponent({ role }: MapComponentProps) {
 	const [position, setPosition] = useState<LatLngExpression | null>(null);
 	const [permissionDenied, setPermissionDenied] = useState(false);
 	const [loading, setLoading] = useState(true);
 
-	const friends: Friend[] = [
+	// Hardcoded sample data
+	const allResidents: Resident[] = [
 		{
 			residentName: 'Luke Chiang',
 			residentStatus: 'safe',
 			residentLocation: [14.6538, 121.0687],
-		}, // near UP Diliman
+		},
 		{
 			residentName: 'Nicole Zefanya',
 			residentStatus: 'monitoring',
 			residentLocation: [14.6488, 121.0737],
-		}, // near Philcoa
+		},
 		{
 			residentName: 'Jeff Bernat',
 			residentStatus: 'unsafe',
 			residentLocation: [14.6361, 121.0583],
-		}, // near Cubao
+		},
+		{
+			residentName: 'Anna Smith',
+			residentStatus: 'safe',
+			residentLocation: [14.64, 121.05],
+		},
+	];
+
+	const friends: Resident[] = [
+		{
+			residentName: 'Luke Chiang',
+			residentStatus: 'safe',
+			residentLocation: [14.6538, 121.0687],
+		},
+		{
+			residentName: 'Nicole Zefanya',
+			residentStatus: 'monitoring',
+			residentLocation: [14.6488, 121.0737],
+		},
 	];
 
 	useEffect(() => {
-		// Add async boundary
 		const fetchLocation = async () => {
 			if (!navigator.geolocation) {
 				setPermissionDenied(true);
@@ -80,7 +102,6 @@ export default function MapComponent() {
 			);
 		};
 
-		// Defer call to avoid sync state updates during render
 		setTimeout(fetchLocation, 0);
 	}, []);
 
@@ -126,6 +147,7 @@ export default function MapComponent() {
 		);
 
 	const mapCenter = position || [14.5995, 120.9842]; // fallback: Manila
+	const markers = role === 'rescuer' ? allResidents : friends;
 
 	return (
 		<div className='h-[72vh] fixed top-[18vh] left-0 w-full z-0 mb-[-5vh]'>
@@ -144,27 +166,27 @@ export default function MapComponent() {
 					</Popup>
 				</Marker>
 
-				{friends.map((friend, idx) => {
+				{markers.map((resident, idx) => {
 					const color =
-						friend.residentStatus === 'safe'
+						resident.residentStatus === 'safe'
 							? 'green'
-							: friend.residentStatus === 'monitoring'
+							: resident.residentStatus === 'monitoring'
 							? 'yellow'
 							: 'red';
 					return (
 						<Marker
 							key={idx}
-							position={friend.residentLocation}
+							position={resident.residentLocation}
 							icon={createIcon(color)}>
 							<Popup>
-								<b>{friend.residentName}</b> —{' '}
-								{friend.residentStatus.toUpperCase()}
+								<b>{resident.residentName}</b> —{' '}
+								{resident.residentStatus.toUpperCase()}
 							</Popup>
 							<Tooltip
 								direction='top'
 								offset={[0, -40]}
 								permanent>
-								{friend.residentName}
+								{resident.residentName}
 							</Tooltip>
 						</Marker>
 					);

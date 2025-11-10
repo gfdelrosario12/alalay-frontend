@@ -1,0 +1,25 @@
+@reference "tailwindcss";
+
+.rescuer-people-container {
+	@apply font-sans fixed top-[18vh] left-0 w-full h-[72vh] flex flex-col justify-between py-6;
+}
+
+.rescuer-people-link {
+	@apply w-full flex justify-between px-6;
+}
+
+.add-contact-button {
+	@apply underline;
+}
+
+.rescuer-people-link .refresh {
+	@apply flex gap-2 items-center;
+}
+
+.refresh img {
+	@apply w-auto h-auto;
+}
+
+.rescuer-people-cards {
+	@apply w-full h-[65vh] flex flex-col gap-4 items-center mt-4 pb-24 overflow-y-auto;
+}

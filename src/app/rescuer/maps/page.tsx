@@ -1,10 +1,10 @@
 'use client';
 
-import '../../resident-styles/maps/resident-map.css';
+import '../../rescuer-styles/maps/rescuer-map.css';
 import Header from '../../universal-components/header';
 import AlalayNavigation from '../../universal-components/alalay-navigation';
 import dynamic from 'next/dynamic';
-import ResidentMapStatus from '@/app/resident-components/maps/resident-map-status';
+import RescuerMapStatus from '../../rescuer-components/maps/rescuer-map-status';
 
 const MapComponent = dynamic(
 	() => import('../../universal-components/map-component'),
@@ -16,22 +16,22 @@ const MapComponent = dynamic(
 export default function RescuerMap() {
 	return (
 		<>
-			<div className='resident-map-container'>
+			<div className='rescuer-map-container'>
 				{/* Header for the Maps */}
 				<Header
 					title='Welcome, Juan!'
-					subtitle='How are you today?'
+					subtitle='What will you do today?'
 					date='December 25, 2025'
 					time='10:30 AM'
 					image='/images/header-icon.jpg'
 				/>
 				{/* Placeholder for now */}
 
-				<MapComponent role='resident' />
-				<ResidentMapStatus />
+				<MapComponent role='rescuer' />
+				<RescuerMapStatus />
 
 				{/* Navigation Bar */}
-				<AlalayNavigation role='resident' />
+				<AlalayNavigation role='rescuer' />
 			</div>
 		</>
 	);

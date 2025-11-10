@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { StaticImageData } from 'next/image';
-import '../resident-styles/resident-header.css';
+import '../universal-styles/header.css';
 
-type ResidentHeaderProps = {
+type HeaderProps = {
 	title: string;
 	subtitle: string;
 	date: string;
@@ -10,13 +10,13 @@ type ResidentHeaderProps = {
 	image: string | StaticImageData;
 };
 
-export default function ResidentHeader({
+export default function Header({
 	title,
 	subtitle,
 	date,
 	time,
 	image,
-}: ResidentHeaderProps) {
+}: HeaderProps) {
 	return (
 		<>
 			<div className='header-container'>

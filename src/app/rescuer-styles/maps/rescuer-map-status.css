@@ -1,0 +1,49 @@
+@reference "tailwindcss";
+
+.resident-map-status {
+	@apply z-50 fixed bottom-[10vh] left-0 font-sans bg-[var(--color-gray)] h-[24vh] flex flex-col justify-center items-center w-full p-4 rounded-lg text-center rounded-t-3xl shadow-[0_-3px_15px_rgba(0,0,0,0.3)];
+}
+
+.status-header {
+	@apply h-[40%] pt-5 flex flex-col justify-center items-center w-full;
+}
+
+.status-title {
+	@apply mb-0;
+}
+
+.status-title h2 {
+	@apply font-semibold text-2xl mb-0;
+}
+
+.status-rescuing {
+	@apply text-[var(--color-red)];
+}
+
+.status-idle {
+	@apply text-[var(--color-yellow)];
+}
+
+.status-awaiting {
+	@apply text-[var(--color-black)];
+}
+
+.status-title p {
+	@apply text-sm font-light;
+}
+
+.status-buttons {
+	@apply min-w-[85%] p-0 m-auto flex items-center justify-between;
+}
+
+.status-buttons button {
+	@apply px-4 py-2 text-[#fafafa] rounded-lg;
+}
+
+.status-buttons .mark-rescuing {
+	@apply bg-[var(--color-red)];
+}
+
+.status-buttons .mark-idle {
+	@apply bg-[var(--color-yellow)] text-[var(--color-black)];
+}

@@ -1,34 +1,25 @@
 'use client';
 
-import '../../resident-styles/people/resident-people.css';
+import '../../rescuer-styles/people/rescuer-people.css';
 import Header from '../../universal-components/header';
 import AlalayNavigation from '../../universal-components/alalay-navigation';
 import PeopleCard from '@/app/universal-components/people-card';
-import AddContactModal from '@/app/resident-components/people/add-contact-modal';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
 
 export default function RescuerPeople() {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
 	return (
 		<>
 			{/* Header for the People Page */}
 			<Header
-				title='My People'
-				subtitle='Check-in on your love ones'
+				title='Residents'
+				subtitle='Check the status of all the residents'
 				date='December 25, 2025'
 				time='10:30 AM'
 				image='/images/header-icon.jpg'
 			/>
-			<div className='resident-people-container'>
-				<div className='resident-people-link'>
-					<button
-						onClick={() => setIsModalOpen(true)}
-						className='add-contact-button'>
-						+ Add Contact
-					</button>
+			<div className='rescuer-people-container'>
+				<div className='rescuer-people-link'>
 					<Link
 						href=''
 						className='refresh'>
@@ -41,7 +32,7 @@ export default function RescuerPeople() {
 						/>
 					</Link>
 				</div>
-				<div className='resident-people-cards'>
+				<div className='rescuer-people-cards'>
 					<PeopleCard
 						residentName='Luke Chiang'
 						residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
@@ -49,6 +40,7 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='123123123'
 						residentStatus='Safe'
+						isRescuer={true}
 					/>
 					<PeopleCard
 						residentName='Niki Zefanya'
@@ -57,6 +49,7 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='231231231'
 						residentStatus='Unsafe'
+						isRescuer={true}
 					/>
 					<PeopleCard
 						residentName='Jeff Bernat'
@@ -65,6 +58,7 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='123143234'
 						residentStatus='Monitoring'
+						isRescuer={true}
 					/>
 					<PeopleCard
 						residentName='Jeff Bernat'
@@ -73,6 +67,7 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='123143234'
 						residentStatus='Monitoring'
+						isRescuer={true}
 					/>
 					<PeopleCard
 						residentName='Jeff Bernat'
@@ -81,6 +76,7 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='123143234'
 						residentStatus='Monitoring'
+						isRescuer={true}
 					/>
 					<PeopleCard
 						residentName='Jeff Bernat'
@@ -89,17 +85,13 @@ export default function RescuerPeople() {
 						residentAvatar='/images/header-icon.jpg'
 						residentId='123143234'
 						residentStatus='Monitoring'
+						isRescuer={true}
 					/>
 				</div>
 
 				{/* Navigation Bar */}
-				<AlalayNavigation role='resident' />
+				<AlalayNavigation role='rescuer' />
 			</div>
-			{/* Add Contact Modal */}
-			<AddContactModal
-				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-			/>
 		</>
 	);
 }
