@@ -1,0 +1,22 @@
+{
+    "name": "Alalay App",
+    "short_name": "Alalay",
+    "description": "A calamity response AI application.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fafafa",
+    "theme_color": "#2563eb",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/images/app-icon/alalay-icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/app-icon/alalay-icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

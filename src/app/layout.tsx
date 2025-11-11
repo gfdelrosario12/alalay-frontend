@@ -1,8 +1,15 @@
-// app/layout.tsx
-'use client';
-
-import { ThemeProvider } from './ThemeProvider/ThemeProvider';
 import './globals.css';
+import ClientLayout from './client-layout';
+
+export const metadata = {
+	title: 'Alalay',
+	description: 'A calamity response AI application',
+	manifest: '/manifest.json',
+	icons: {
+		icon: '/images/app-icon/alalay-icon-192x192.png',
+		apple: '/images/app-icon/alalay-icon-192x192.png',
+	},
+};
 
 export default function RootLayout({
 	children,
@@ -11,8 +18,22 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
+			<head>
+				<link
+					rel='manifest'
+					href='/manifest.json'
+				/>
+				<meta
+					name='theme-color'
+					content='#2563eb'
+				/>
+				<link
+					rel='apple-touch-icon'
+					href='/icons/icon-192x192.png'
+				/>
+			</head>
 			<body>
-				<ThemeProvider>{children}</ThemeProvider>
+				<ClientLayout>{children}</ClientLayout>
 			</body>
 		</html>
 	);
