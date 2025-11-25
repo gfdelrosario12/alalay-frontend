@@ -8,6 +8,7 @@ const links = [
 	{ name: 'Dashboard', href: '/admin/dashboard' },
 	{ name: 'User Management', href: '/admin/user-management' },
 	{ name: 'Calamity', href: '/admin/calamity' },
+	{ name: 'Incident', href: '/admin/incidents' },
 	{ name: 'Settings', href: '/admin/settings' },
 ];
 
