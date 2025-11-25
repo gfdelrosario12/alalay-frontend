@@ -7,6 +7,7 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const links = [
 	{ name: 'Dashboard', href: '/admin/dashboard' },
 	{ name: 'User Management', href: '/admin/user-management' },
+	{ name: 'Calamity', href: '/admin/calamity' },
 	{ name: 'Settings', href: '/admin/settings' },
 ];
 
