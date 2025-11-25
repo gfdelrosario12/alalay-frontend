@@ -35,11 +35,11 @@ export default function Login() {
 						className='border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500'
 						required
 					/>
-					<button
-						type='submit'
-						className='bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transition'>
-						Login
-					</button>
+					<Link
+						href='/resident/maps'
+						className='bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transition text-center'>
+						<button type='submit'>Login</button>
+					</Link>
 				</form>
 				<p className='mt-4 text-center text-gray-600'>
 					Don`t have an account?{' '}
