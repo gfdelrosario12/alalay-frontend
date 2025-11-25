@@ -9,6 +9,7 @@ const links = [
 	{ name: 'User Management', href: '/admin/user-management' },
 	{ name: 'Calamity', href: '/admin/calamity' },
 	{ name: 'Incident', href: '/admin/incidents' },
+	{ name: 'Rescues', href: '/admin/rescues' },
 	{ name: 'Settings', href: '/admin/settings' },
 ];
 
