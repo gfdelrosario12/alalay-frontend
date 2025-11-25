@@ -44,16 +44,6 @@ export default function LogsCard({
 						<p>Address:</p>
 						<span>{logsAddress}</span>
 					</div>
-					<div className='logs-button'>
-						<button className='delete-button'>
-							<DeleteModal
-								title='Delete Log'
-								description='Are you sure you want to delete this log? This action cannot be undone.'
-								onConfirm={handleConfirmDelete}
-								triggerText='Delete'
-							/>
-						</button>
-					</div>
 				</div>
 			</div>
 		</>

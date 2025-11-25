@@ -26,13 +26,5 @@ p {
 }
 
 .logs-address {
-	@apply w-[70%];
-}
-
-.logs-button {
-	@apply w-[30%] flex justify-end items-end;
-}
-
-.logs-button .delete-button {
-	@apply py-2 px-3 bg-[var(--color-red)] text-[var(--color-white)] rounded-md;
+	@apply w-[90%];
 }
