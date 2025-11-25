@@ -34,7 +34,7 @@ export default function AdminNavigation() {
 			<nav
 				className={`
           fixed top-0 left-0 h-screen bg-white shadow-md p-5 flex flex-col justify-between
-          md:relative md:w-64 md:translate-x-0
+          md:relative md:w-48 md:translate-x-0
           transform transition-transform duration-300 ease-in-out z-30
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           w-64
