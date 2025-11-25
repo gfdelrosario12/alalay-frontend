@@ -9,11 +9,9 @@ import ProfileLink from '@/app/universal-components/profile-components/profile-l
 import EditModalForm from '@/app/universal-components/profile-components/edit-modal-form';
 
 import EditProfileForm from '@/app/universal-components/profile-components/edit-profile-form';
-import ChangeEmailForm from '@/app/universal-components/profile-components/change-email-form';
 import ChangePasswordForm from '@/app/universal-components/profile-components/change-password-form';
 
 import editName from '../../../../public/images/universal-icons/profile-link-icons/edit-profile.png';
-import editEmail from '../../../../public/images/universal-icons/profile-link-icons/email.png';
 import editPassword from '../../../../public/images/universal-icons/profile-link-icons/password.png';
 
 export default function RescuerProfile() {
@@ -37,11 +35,6 @@ export default function RescuerProfile() {
 					onClick={() => setActiveModal('edit')}
 				/>
 				<ProfileLink
-					linkIcon={editEmail}
-					linkName='Change Email'
-					onClick={() => setActiveModal('email')}
-				/>
-				<ProfileLink
 					linkIcon={editPassword}
 					linkName='Change Password'
 					onClick={() => setActiveModal('password')}
@@ -53,16 +46,9 @@ export default function RescuerProfile() {
 			{/* Modal Form for Editing User Profile */}
 			<EditModalForm
 				isOpen={!!activeModal}
-				title={
-					activeModal === 'edit'
-						? 'Edit Profile'
-						: activeModal === 'email'
-						? 'Change Email'
-						: 'Change Password'
-				}
+				title={activeModal === 'edit' ? 'Edit Profile' : 'Change Password'}
 				onClose={() => setActiveModal(null)}>
 				{activeModal === 'edit' && <EditProfileForm />}
-				{activeModal === 'email' && <ChangeEmailForm />}
 				{activeModal === 'password' && <ChangePasswordForm />}
 			</EditModalForm>
 		</>
