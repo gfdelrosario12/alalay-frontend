@@ -1,0 +1,25 @@
+@reference "tailwindcss";
+
+.modal-backdrop {
+	@apply fixed inset-0 backdrop-blur-lg flex justify-center items-center z-50;
+}
+
+.modal-content {
+	@apply bg-[var(--color-gray)] p-6 rounded-lg shadow-lg w-[80%] max-w-md text-center;
+}
+
+.modal-buttons {
+	@apply flex justify-center gap-4 mt-4;
+}
+
+.modal-buttons button {
+	@apply px-4 py-2 rounded-md text-white font-semibold transition-colors duration-300;
+}
+
+.modal-confirm-btn {
+	@apply bg-[var(--color-green)] hover:bg-green-600;
+}
+
+.modal-cancel-btn {
+	@apply bg-[var(--color-red)] hover:bg-red-600;
+}

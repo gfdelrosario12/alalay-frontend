@@ -1,0 +1,61 @@
+@reference "tailwindcss";
+
+.task-card {
+	@apply flex flex-col font-sans text-[14px] bg-[var(--color-gray)] rounded-lg shadow-md w-[90%] p-4 transition-all duration-300;
+}
+
+.task-info {
+	@apply flex justify-between items-center font-medium mb-2;
+}
+
+.task-info h2 {
+	@apply font-semibold text-[16px];
+}
+
+.task-actions {
+	@apply flex gap-2;
+}
+
+.task-accept-btn,
+.task-complete-btn {
+	@apply px-3 py-1 bg-[var(--color-red)] text-[var(--color-white)] rounded-md hover:bg-red-600 transition-colors duration-300 text-sm;
+}
+
+.task-additional {
+	@apply mt-2;
+}
+
+.task-add-info {
+	@apply flex gap-2;
+}
+
+.task-left {
+	@apply w-[30%] flex flex-col gap-1;
+}
+
+.task-right {
+	@apply w-[70%] flex flex-col gap-1;
+}
+
+.task-left h2,
+.task-right h2 {
+	@apply font-semibold text-[14px];
+}
+
+.task-left p,
+.task-right p {
+	@apply font-normal text-[13px];
+}
+
+/* Status Colors */
+.task-status-new {
+	@apply text-[var(--color-green)] font-semibold mt-2;
+}
+
+.task-status-inprogress {
+	@apply text-[var(--color-yellow)] font-semibold mt-2;
+}
+
+.task-status-completed {
+	@apply text-[var(--color-red)] font-semibold mt-2;
+}

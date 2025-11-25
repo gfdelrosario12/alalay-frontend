@@ -24,11 +24,26 @@ export default function AlalayNavigation({ role }: AlalayNavigationProps) {
 			path: `${basePath}/news`,
 			icon: 'news',
 		},
-		{
-			label: 'People',
-			path: `${basePath}/people`,
-			icon: 'people',
-		},
+		// Only show People for residents
+		...(role === 'resident'
+			? [
+					{
+						label: 'People',
+						path: `${basePath}/people`,
+						icon: 'people',
+					},
+			  ]
+			: []),
+		// Only show Tasks for rescuers
+		...(role === 'rescuer'
+			? [
+					{
+						label: 'Tasks',
+						path: `${basePath}/tasks`,
+						icon: 'tasks',
+					},
+			  ]
+			: []),
 		{
 			label: 'Maps',
 			path: `${basePath}/maps`,
