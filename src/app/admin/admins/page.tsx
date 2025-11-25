@@ -2,61 +2,59 @@
 import { useState } from 'react';
 import UserFormModal, {
 	UserFormData,
-	RescuerData,
+	AdminData,
 } from '../components/user-form-modal';
 
-type Rescuer = {
+type Admin = {
 	id: number;
 	name: string;
 	email: string;
 	phone: string;
-	assignedArea: string;
-	shift: string;
+	roleLevel: string;
+	permissions: string[];
 	password: string;
 };
 
-export default function RescuersTable() {
-	const [rescuers, setRescuers] = useState<Rescuer[]>([
+export default function AdminsTable() {
+	const [admins, setAdmins] = useState<Admin[]>([
 		{
 			id: 1,
-			name: 'Juan Dela Cruz',
-			email: 'juan@email.com',
+			name: 'Ana Santos',
+			email: 'ana@email.com',
 			phone: '09123456789',
-			assignedArea: 'Zone 1',
-			shift: 'Morning',
+			roleLevel: 'Super Admin',
+			permissions: ['manage_users', 'view_logs'],
 			password: '******',
 		},
 	]);
 
 	const [showForm, setShowForm] = useState(false);
-	const [editingUser, setEditingUser] = useState<Rescuer | null>(null);
+	const [editingUser, setEditingUser] = useState<Admin | null>(null);
 
 	const handleAdd = () => {
 		setEditingUser(null);
 		setShowForm(true);
 	};
 
-	const handleEdit = (user: Rescuer) => {
+	const handleEdit = (user: Admin) => {
 		setEditingUser(user);
 		setShowForm(true);
 	};
 
 	const handleDelete = (id: number) => {
-		setRescuers((prev) => prev.filter((r) => r.id !== id));
+		setAdmins((prev) => prev.filter((a) => a.id !== id));
 	};
 
-	// Proper type narrowing for rescuer modal
+	// Proper type narrowing for admin modal
 	const handleSubmit = (data: UserFormData) => {
-		const rescuerData = data as RescuerData;
+		const adminData = data as AdminData;
 
 		if (editingUser) {
-			setRescuers((prev) =>
-				prev.map((r) =>
-					r.id === editingUser.id ? { ...r, ...rescuerData } : r
-				)
+			setAdmins((prev) =>
+				prev.map((a) => (a.id === editingUser.id ? { ...a, ...adminData } : a))
 			);
 		} else {
-			setRescuers((prev) => [...prev, { id: Date.now(), ...rescuerData }]);
+			setAdmins((prev) => [...prev, { id: Date.now(), ...adminData }]);
 		}
 
 		setShowForm(false);
@@ -66,11 +64,11 @@ export default function RescuersTable() {
 	return (
 		<div>
 			<div className='flex justify-between items-center mb-4'>
-				<h2 className='text-xl font-semibold'>Rescuers</h2>
+				<h2 className='text-xl font-semibold'>Admins</h2>
 				<button
 					onClick={handleAdd}
 					className='px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700'>
-					Add Rescuer
+					Add Admin
 				</button>
 			</div>
 
@@ -80,29 +78,29 @@ export default function RescuersTable() {
 						<th className='p-3 text-left'>Name</th>
 						<th className='p-3 text-left'>Email</th>
 						<th className='p-3 text-left'>Phone</th>
-						<th className='p-3 text-left'>Assigned Area</th>
-						<th className='p-3 text-left'>Shift</th>
+						<th className='p-3 text-left'>Role Level</th>
+						<th className='p-3 text-left'>Permissions</th>
 						<th className='p-3 text-left'>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					{rescuers.map((r) => (
+					{admins.map((a) => (
 						<tr
-							key={r.id}
+							key={a.id}
 							className='border-b'>
-							<td className='p-3'>{r.name}</td>
-							<td className='p-3'>{r.email}</td>
-							<td className='p-3'>{r.phone}</td>
-							<td className='p-3'>{r.assignedArea}</td>
-							<td className='p-3'>{r.shift}</td>
+							<td className='p-3'>{a.name}</td>
+							<td className='p-3'>{a.email}</td>
+							<td className='p-3'>{a.phone}</td>
+							<td className='p-3'>{a.roleLevel}</td>
+							<td className='p-3'>{a.permissions.join(', ')}</td>
 							<td className='p-3 flex gap-2'>
 								<button
-									onClick={() => handleEdit(r)}
+									onClick={() => handleEdit(a)}
 									className='px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600'>
 									Edit
 								</button>
 								<button
-									onClick={() => handleDelete(r.id)}
+									onClick={() => handleDelete(a.id)}
 									className='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600'>
 									Delete
 								</button>
@@ -114,7 +112,7 @@ export default function RescuersTable() {
 
 			{showForm && (
 				<UserFormModal
-					role='rescuer'
+					role='admin'
 					onSubmit={handleSubmit}
 					initialData={editingUser ?? undefined}
 					onCancel={() => setShowForm(false)}
