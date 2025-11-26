@@ -3,6 +3,7 @@ import { useState } from 'react';
 import UserFormModal, { UserFormData } from '../components/user-form-modal';
 import UserTable from '../components/user-table';
 import UserConfirmationDeleteModal from '../components/user-confirmation-delete-modal';
+import ProtectedRoute from '@/app/universal-components/protected-route';
 
 type User = UserFormData & { id: number; createdAt: string };
 
@@ -123,70 +124,74 @@ export default function UsersPage() {
 	};
 
 	return (
-		<div className='p-4 md:p-6 lg:p-3'>
-			<h1 className='text-2xl font-bold mb-6'>User Management</h1>
+		<ProtectedRoute roles={['admin']}>
+			<div className='p-4 md:p-6 lg:p-3'>
+				<h1 className='text-2xl font-bold mb-6'>User Management</h1>
 
-			{/* Tabs */}
-			<div className='flex flex-col sm:flex-row gap-3 mb-6'>
-				<button
-					onClick={() => setActiveTab('all')}
-					className={`px-4 py-2 rounded-lg font-medium w-full sm:w-auto ${
-						activeTab === 'all'
-							? 'bg-red-600 text-white'
-							: 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-					}`}>
-					All Users
-				</button>
-
-				{tabs.map((tab) => (
+				{/* Tabs */}
+				<div className='flex flex-col sm:flex-row gap-3 mb-6'>
 					<button
-						key={tab}
-						onClick={() => setActiveTab(tab)}
+						onClick={() => setActiveTab('all')}
 						className={`px-4 py-2 rounded-lg font-medium w-full sm:w-auto ${
-							activeTab === tab
+							activeTab === 'all'
 								? 'bg-red-600 text-white'
 								: 'bg-gray-200 text-gray-700 hover:bg-gray-300'
 						}`}>
-						{tab.charAt(0).toUpperCase() + tab.slice(1)}
+						All Users
 					</button>
-				))}
-			</div>
 
-			{/* Add User button */}
-			<div className='flex justify-end mb-4'>
-				<button
-					onClick={handleAddClick}
-					className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
-					Add User
-				</button>
-			</div>
+					{tabs.map((tab) => (
+						<button
+							key={tab}
+							onClick={() => setActiveTab(tab)}
+							className={`px-4 py-2 rounded-lg font-medium w-full sm:w-auto ${
+								activeTab === tab
+									? 'bg-red-600 text-white'
+									: 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+							}`}>
+							{tab.charAt(0).toUpperCase() + tab.slice(1)}
+						</button>
+					))}
+				</div>
 
-			<UserTable
-				users={displayedUsers}
-				onEdit={handleEditClick}
-				onDelete={handleDeleteClick}
-			/>
+				{/* Add User button */}
+				<div className='flex justify-end mb-4'>
+					<button
+						onClick={handleAddClick}
+						className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
+						Add User
+					</button>
+				</div>
 
-			{showModal && (
-				<UserFormModal
-					mode={mode}
-					initialData={editingUser ?? undefined}
-					onSubmit={handleSubmit}
-					onDelete={
-						mode === 'edit' ? () => handleDeleteClick(editingUser!) : undefined
-					}
-					onCancel={() => setShowModal(false)}
+				<UserTable
+					users={displayedUsers}
+					onEdit={handleEditClick}
+					onDelete={handleDeleteClick}
 				/>
-			)}
 
-			{/* Delete Confirmation Modal */}
-			{showDeleteModal && deleteUser && (
-				<UserConfirmationDeleteModal
-					message={`Are you sure you want to delete ${deleteUser.firstName} ${deleteUser.lastName}?`}
-					onConfirm={confirmDelete}
-					onCancel={cancelDelete}
-				/>
-			)}
-		</div>
+				{showModal && (
+					<UserFormModal
+						mode={mode}
+						initialData={editingUser ?? undefined}
+						onSubmit={handleSubmit}
+						onDelete={
+							mode === 'edit'
+								? () => handleDeleteClick(editingUser!)
+								: undefined
+						}
+						onCancel={() => setShowModal(false)}
+					/>
+				)}
+
+				{/* Delete Confirmation Modal */}
+				{showDeleteModal && deleteUser && (
+					<UserConfirmationDeleteModal
+						message={`Are you sure you want to delete ${deleteUser.firstName} ${deleteUser.lastName}?`}
+						onConfirm={confirmDelete}
+						onCancel={cancelDelete}
+					/>
+				)}
+			</div>
+		</ProtectedRoute>
 	);
 }

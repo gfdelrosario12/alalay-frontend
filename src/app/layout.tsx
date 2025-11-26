@@ -1,5 +1,7 @@
 import './globals.css';
 import ClientLayout from './client-layout';
+import { ThemeProvider } from './ThemeProvider/ThemeProvider';
+import { AuthProvider } from './context/auth'; // make sure path is correct
 
 export const metadata = {
 	title: 'Alalay',
@@ -33,7 +35,11 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<ClientLayout>{children}</ClientLayout>
+				<AuthProvider>
+					<ThemeProvider>
+						<ClientLayout>{children}</ClientLayout>
+					</ThemeProvider>
+				</AuthProvider>
 			</body>
 		</html>
 	);

@@ -5,6 +5,7 @@ import IncidentFormModal, {
 	IncidentFormData,
 } from '../components/incident-form-modal';
 import { Incident } from '../components/incident-form-modal';
+import ProtectedRoute from '@/app/universal-components/protected-route';
 
 export default function IncidentsPage() {
 	const [incidents, setIncidents] = useState<Incident[]>([
@@ -57,25 +58,27 @@ export default function IncidentsPage() {
 	};
 
 	return (
-		<div className='p-4 md:p-6 lg:p-3'>
-			<h1 className='text-2xl font-bold mb-6'>Incident Management</h1>
+		<ProtectedRoute roles={['admin']}>
+			<div className='p-4 md:p-6 lg:p-3'>
+				<h1 className='text-2xl font-bold mb-6'>Incident Management</h1>
 
-			<div className='flex justify-end mb-4'>
-				<button
-					onClick={handleAddClick}
-					className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
-					Add Incident
-				</button>
+				<div className='flex justify-end mb-4'>
+					<button
+						onClick={handleAddClick}
+						className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
+						Add Incident
+					</button>
+				</div>
+
+				<IncidentTable incidents={incidents} />
+
+				{showModal && (
+					<IncidentFormModal
+						onSubmit={handleSubmit}
+						onCancel={() => setShowModal(false)}
+					/>
+				)}
 			</div>
-
-			<IncidentTable incidents={incidents} />
-
-			{showModal && (
-				<IncidentFormModal
-					onSubmit={handleSubmit}
-					onCancel={() => setShowModal(false)}
-				/>
-			)}
-		</div>
+		</ProtectedRoute>
 	);
 }

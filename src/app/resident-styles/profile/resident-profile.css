@@ -1,5 +1,13 @@
 @reference "tailwindcss";
 
 .resident-profile-container {
-	@apply fixed top-[45vh] md:top-[40vh] left-0 w-full py-8 md:py-5 px-4;
+	@apply font-sans fixed top-[45vh] md:top-[40vh] left-0 w-full h-[42vh] py-8 md:py-5 px-4 flex flex-col justify-between;
+}
+
+.logout-container {
+	@apply bg-[var(--color-red)] text-[var(--color-white)] w-full py-3 px-4 rounded-md flex justify-center;
+}
+
+.logout-container button {
+	@apply w-full;
 }

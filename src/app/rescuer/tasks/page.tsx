@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import TaskCard from '../../rescuer-components/tasks/task-card';
+import ProtectedRoute from '@/app/universal-components/protected-route';
 
 interface Task {
 	id: string;
@@ -64,41 +65,43 @@ export default function RescuerTasks() {
 
 	return (
 		<>
-			{/* Header for the Tasks Page */}
-			<Header
-				title='Tasks'
-				subtitle='Check your assigned tasks'
-				date='December 25, 2025'
-				time='10:30 AM'
-				image='/images/header-icon.jpg'
-			/>
-			<div className='rescuer-people-container'>
-				<div className='rescuer-people-link'>
-					<Link
-						href=''
-						className='refresh'>
-						<p>Refresh</p>
-						<Image
-							src='/images/universal-icons/refresh.png'
-							alt='refresh'
-							width={20}
-							height={20}
-						/>
-					</Link>
-				</div>
+			<ProtectedRoute roles={['rescuer']}>
+				{/* Header for the Tasks Page */}
+				<Header
+					title='Tasks'
+					subtitle='Check your assigned tasks'
+					date='December 25, 2025'
+					time='10:30 AM'
+					image='/images/header-icon.jpg'
+				/>
+				<div className='rescuer-people-container'>
+					<div className='rescuer-people-link'>
+						<Link
+							href=''
+							className='refresh'>
+							<p>Refresh</p>
+							<Image
+								src='/images/universal-icons/refresh.png'
+								alt='refresh'
+								width={20}
+								height={20}
+							/>
+						</Link>
+					</div>
 
-				<div className='rescuer-people-cards'>
-					{tasks.map((task) => (
-						<TaskCard
-							key={task.id}
-							{...task}
-							onStatusChange={handleStatusChange}
-						/>
-					))}
-				</div>
+					<div className='rescuer-people-cards'>
+						{tasks.map((task) => (
+							<TaskCard
+								key={task.id}
+								{...task}
+								onStatusChange={handleStatusChange}
+							/>
+						))}
+					</div>
 
-				<AlalayNavigation role='rescuer' />
-			</div>
+					<AlalayNavigation role='rescuer' />
+				</div>
+			</ProtectedRoute>
 		</>
 	);
 }
