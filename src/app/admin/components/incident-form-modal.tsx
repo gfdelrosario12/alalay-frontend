@@ -2,9 +2,9 @@
 import { useState } from 'react';
 
 export type Incident = {
-	id: number;
-	calamityId: number;
-	reporterUserId: number;
+	id: string;
+	calamityId: string;
+	reporterUserId: string;
 	detectedDateTime: string;
 	description: string;
 	location: string;
@@ -16,8 +16,8 @@ export type Incident = {
 export type IncidentFormData = Omit<Incident, 'id'>;
 
 type IncidentFormModalProps = {
-	onSubmit: (data: IncidentFormData) => void;
-	onCancel: () => void;
+    onSubmit: (data: IncidentFormData) => void | Promise<void>;
+    onCancel: () => void;
 };
 
 export default function IncidentFormModal({
@@ -25,8 +25,8 @@ export default function IncidentFormModal({
 	onCancel,
 }: IncidentFormModalProps) {
 	const [formData, setFormData] = useState<IncidentFormData>({
-		calamityId: 0,
-		reporterUserId: 0,
+		calamityId: '',
+		reporterUserId: '',
 		detectedDateTime: '',
 		description: '',
 		location: '',
@@ -45,7 +45,7 @@ export default function IncidentFormModal({
 		if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
 			setFormData({ ...formData, [name]: e.target.checked });
 		} else if (name.includes('Id')) {
-			setFormData({ ...formData, [name]: Number(value) }); // convert ID fields to number
+			setFormData({ ...formData, [name]: value }); // keep as string
 		} else {
 			setFormData({ ...formData, [name]: value });
 		}
@@ -65,7 +65,7 @@ export default function IncidentFormModal({
 					className='flex flex-col gap-3'>
 					<label className='font-medium'>Calamity ID</label>
 					<input
-						type='number'
+						type='text'
 						name='calamityId'
 						value={formData.calamityId}
 						onChange={handleChange}
@@ -75,7 +75,7 @@ export default function IncidentFormModal({
 
 					<label className='font-medium'>Reporter User ID</label>
 					<input
-						type='number'
+						type='text'
 						name='reporterUserId'
 						value={formData.reporterUserId}
 						onChange={handleChange}

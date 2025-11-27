@@ -1,74 +1,82 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IncidentTable from '../components/incident-table';
-import IncidentFormModal, {
-	IncidentFormData,
-} from '../components/incident-form-modal';
-import { Incident } from '../components/incident-form-modal';
+import IncidentFormModal from '../components/incident-form-modal';
 import ProtectedRoute from '@/app/universal-components/protected-route';
 
+const GRAPHQL_ENDPOINT =
+	process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
+
+export type Incident = {
+	id: string;
+	calamity?: { id: string; description: string };
+	rescuer?: { id: string; firstName: string; lastName: string };
+	latitude?: number;
+	longitude?: number;
+	description?: string;
+	otherAffectedMembers?: string;
+	otherImportantDetails?: string;
+	createdAt?: string;
+};
+
+export type IncidentFormData = {
+	calamityId: string;
+	rescuerId?: string;
+	latitude?: number;
+	longitude?: number;
+	description?: string;
+	otherAffectedMembers?: string;
+	otherImportantDetails?: string;
+};
+
 export default function IncidentsPage() {
-	const [incidents, setIncidents] = useState<Incident[]>([
-		{
-			id: 1,
-			calamityId: 1,
-			reporterUserId: 101,
-			detectedDateTime: '2025-11-26T08:30',
-			description: 'Flood water reached 2 meters in downtown area.',
-			location: 'Downtown City Center',
-			isRescueAssigned: true,
-			otherAffectedMembers: '5 families evacuated',
-			otherImportantDetails: 'Main bridge submerged, traffic halted',
-		},
-		{
-			id: 2,
-			calamityId: 2,
-			reporterUserId: 102,
-			detectedDateTime: '2025-11-25T15:45',
-			description: 'Minor earthquake caused wall cracks in multiple homes.',
-			location: 'Hilltop Suburb',
-			isRescueAssigned: false,
-			otherAffectedMembers: '2 families reported minor injuries',
-			otherImportantDetails: 'No structural collapse, monitoring ongoing',
-		},
-		{
-			id: 3,
-			calamityId: 1,
-			reporterUserId: 103,
-			detectedDateTime: '2025-11-26T10:15',
-			description: 'Flood affected power lines, causing outages.',
-			location: 'Riverside District',
-			isRescueAssigned: true,
-			otherAffectedMembers: '3 households without electricity',
-			otherImportantDetails: 'Emergency generator deployed',
-		},
-	]);
+	const [incidents, setIncidents] = useState<Incident[]>([]);
 	const [showModal, setShowModal] = useState(false);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchIncidents = async () => {
+			const query = `query { getIncidents { id calamity { id description } rescuer { id firstName lastName } latitude longitude description otherAffectedMembers otherImportantDetails createdAt } }`;
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query }),
+			});
+			const data = await res.json();
+			setIncidents(data.data?.getIncidents || []);
+			setLoading(false);
+		};
+		fetchIncidents();
+	}, []);
 
 	const handleAddClick = () => setShowModal(true);
 
-	const handleSubmit = (data: IncidentFormData) => {
-		const newIncident: Incident = {
-			...data,
-			id: incidents.length > 0 ? incidents[incidents.length - 1].id + 1 : 1,
-			detectedDateTime: data.detectedDateTime,
-		};
-		setIncidents([...incidents, newIncident]);
+	const handleSubmit = async (data: IncidentFormData) => {
+		const mutation = `mutation CreateIncident($input: CreateIncidentInput!) { createIncident(input: $input) { id } }`;
+		const variables = { input: data };
+		await fetch(GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query: mutation, variables }),
+		});
+		// Refetch from backend for dynamic data
+		const query = `query { getIncidents { id calamity { id description } rescuer { id firstName lastName } latitude longitude description otherAffectedMembers otherImportantDetails createdAt } }`;
+		const res = await fetch(GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query }),
+		});
+		const result = await res.json();
+		setIncidents(result.data?.getIncidents || []);
 		setShowModal(false);
 	};
+
+	if (loading) return <div>Loading incidents...</div>;
 
 	return (
 		<ProtectedRoute roles={['ADMIN']}>
 			<div className='p-4 md:p-6 lg:p-3'>
 				<h1 className='text-2xl font-bold mb-6'>Incident Management</h1>
-
-				<div className='flex justify-end mb-4'>
-					<button
-						onClick={handleAddClick}
-						className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
-						Add Incident
-					</button>
-				</div>
 
 				<IncidentTable incidents={incidents} />
 
