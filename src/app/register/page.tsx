@@ -2,6 +2,10 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+const GRAPHQL_ENDPOINT =
+	process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export default function Register() {
 	// User info
@@ -9,6 +13,8 @@ export default function Register() {
 	const [firstName, setFirstName] = useState('');
 	const [middleName, setMiddleName] = useState('');
 	const [lastName, setLastName] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState('');
+	const [age, setAge] = useState('');
 
 	// Passwords
 	const [password, setPassword] = useState('');
@@ -19,9 +25,12 @@ export default function Register() {
 
 	// Other fields
 	const [birthDate, setBirthDate] = useState('');
-	const [emergencyContact, setEmergencyContact] = useState('');
+	const [emergencyContactName, setEmergencyContactName] = useState('');
+	const [emergencyContactDetails, setEmergencyContactDetails] = useState('');
 
-	const handleRegister = (e: React.FormEvent) => {
+	const router = useRouter();
+
+	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		if (password !== confirmPassword) {
@@ -29,18 +38,47 @@ export default function Register() {
 			return;
 		}
 
-		console.log({
-			email,
-			firstName,
-			middleName,
-			lastName,
-			password,
-			birthDate,
-			emergencyContact,
-			address, // full text address
-		});
+		const mutation = `mutation CreateUser($input: CreateUserInput!) {\n  createUser(input: $input) {\n    id\n    email\n    firstName\n    lastName\n    role\n  }\n}`;
+		const variables = {
+			input: {
+				email,
+				password,
+				firstName,
+				middleName,
+				lastName,
+				permanentAddress: address,
+				age: age ? parseInt(age) : null,
+				birthDate,
+				emergencyContactName,
+				emergencyContactDetails,
+				phoneNumber,
+				role: 'RESIDENT',
+			},
+		};
 
-		alert('Registered! (Front-end only)');
+		try {
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query: mutation, variables }),
+			});
+			if (!res.ok) {
+				throw new Error('Network response was not ok');
+			}
+			const data = await res.json();
+			if (data.errors && data.errors.length > 0) {
+				alert('Registration failed: ' + data.errors[0].message);
+				return;
+			}
+			if (!data.data || !data.data.createUser) {
+				alert('Registration failed: Unexpected response from server.');
+				return;
+			}
+			alert('Registered successfully!');
+			router.push('/login');
+		} catch (err) {
+			alert('Registration error: ' + (err as Error).message);
+		}
 	};
 
 	return (
@@ -93,6 +131,15 @@ export default function Register() {
 							/>
 
 							<input
+								type='text'
+								placeholder='Phone Number'
+								value={phoneNumber}
+								onChange={(e) => setPhoneNumber(e.target.value)}
+								className='input'
+								required
+							/>
+
+							<input
 								type='date'
 								value={birthDate}
 								onChange={(e) => setBirthDate(e.target.value)}
@@ -102,9 +149,27 @@ export default function Register() {
 
 							<input
 								type='text'
-								placeholder='Emergency Contact'
-								value={emergencyContact}
-								onChange={(e) => setEmergencyContact(e.target.value)}
+								placeholder='Emergency Contact Name'
+								value={emergencyContactName}
+								onChange={(e) => setEmergencyContactName(e.target.value)}
+								className='input'
+								required
+							/>
+
+							<input
+								type='text'
+								placeholder='Emergency Contact Details'
+								value={emergencyContactDetails}
+								onChange={(e) => setEmergencyContactDetails(e.target.value)}
+								className='input'
+								required
+							/>
+
+							<input
+								type='number'
+								placeholder='Age'
+								value={age}
+								onChange={(e) => setAge(e.target.value)}
 								className='input'
 								required
 							/>
