@@ -9,14 +9,14 @@ const GRAPHQL_ENDPOINT =
 
 export type Incident = {
 	id: string;
-	calamity?: { id: string; description: string };
-	rescuer?: { id: string; firstName: string; lastName: string };
+	calamity?: { id: string };
+	rescuer?: { id: string };
 	latitude?: number;
 	longitude?: number;
 	description?: string;
 	otherAffectedMembers?: string;
 	otherImportantDetails?: string;
-	createdAt?: string;
+	detectedDatetime?: string;
 };
 
 export type IncidentFormData = {
@@ -36,7 +36,7 @@ export default function IncidentsPage() {
 
 	useEffect(() => {
 		const fetchIncidents = async () => {
-			const query = `query { getIncidents { id calamity { id description } rescuer { id firstName lastName } latitude longitude description otherAffectedMembers otherImportantDetails createdAt } }`;
+			const query = `query { getIncidents { id calamity { id } rescuer { id } latitude longitude description otherAffectedMembers otherImportantDetails detectedDatetime } }`;
 			const res = await fetch(GRAPHQL_ENDPOINT, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ export default function IncidentsPage() {
 			body: JSON.stringify({ query: mutation, variables }),
 		});
 		// Refetch from backend for dynamic data
-		const query = `query { getIncidents { id calamity { id description } rescuer { id firstName lastName } latitude longitude description otherAffectedMembers otherImportantDetails createdAt } }`;
+		const query = `query { getIncidents { id calamity { id } rescuer { id } latitude longitude description otherAffectedMembers otherImportantDetails detectedDatetime } }`;
 		const res = await fetch(GRAPHQL_ENDPOINT, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
