@@ -1,13 +1,33 @@
 import Header from '../../universal-components/header';
 import AlalayNavigation from '../../universal-components/alalay-navigation';
-import RescuerLogCard from '@/app/rescuer-components/logs/rescuer-log-card';
 import '../../rescuer-styles/logs/rescuer-logs.css';
 import ProtectedRoute from '@/app/universal-components/protected-route';
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export default function RescuerLogs() {
+	const [logs, setLogs] = useState<any[]>([]);
+
+	useEffect(() => {
+		const fetchLogs = async () => {
+			const query = `query { getResponseLogs { id message createdAt user { id firstName lastName } calamity { id description } } }`;
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query })
+			});
+			const data = await res.json();
+			if (data.data && data.data.getResponseLogs) {
+				setLogs(data.data.getResponseLogs);
+			}
+		};
+		fetchLogs();
+	}, []);
+
 	return (
 		<>
 			<ProtectedRoute roles={['RESCUER']}>
@@ -22,41 +42,21 @@ export default function RescuerLogs() {
 				<div className='rescuer-logs-container'>
 					<div className='rescuer-logs-header'>
 						<p>All Status Logs</p>
-						<Link
-							href=''
-							className='filter'>
+						<Link href='' className='filter'>
 							<p>Filter</p>
-							<Image
-								src='/images/universal-icons/filter.png'
-								alt='filter.png'
-								width={20}
-								height={20}
-							/>
+							<Image src='/images/universal-icons/filter.png' alt='filter.png' width={20} height={20} />
 						</Link>
 					</div>
-					{/* Placeholder for now */}
 					<div className='logs'>
-						<RescuerLogCard
-							residentName='Niki Zefanya'
-							logsDate='December 25, 2025'
-							logsTime='08:08 PM'
-							logsStatus='monitoring'
-							logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
-						/>
-						<RescuerLogCard
-							residentName='Luke Chiang'
-							logsDate='December 25, 2025'
-							logsTime='08:08 PM'
-							logsStatus='safe'
-							logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
-						/>
-						<RescuerLogCard
-							residentName='Niki Zefanya'
-							logsDate='December 25, 2025'
-							logsTime='08:08 PM'
-							logsStatus='not safe'
-							logsAddress='123 Chicken Curry St., Brgy. UP Diliman, Quezon City, PH, 1101'
-						/>
+						{/* Render logs dynamically */}
+						{logs.map(log => (
+							<div key={log.id} className='log-card'>
+								<p><b>User:</b> {log.user ? `${log.user.firstName} ${log.user.lastName}` : 'Unknown'}</p>
+								<p><b>Calamity:</b> {log.calamity ? log.calamity.description : 'N/A'}</p>
+								<p><b>Message:</b> {log.message}</p>
+								<p><b>Date:</b> {log.createdAt}</p>
+							</div>
+						))}
 					</div>
 				</div>
 				{/* Navigation Bar */}
