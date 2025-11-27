@@ -1,19 +1,6 @@
 'use client';
 import React from 'react';
-
-type User = {
-	id: number;
-	email: string;
-	firstName: string;
-	middleName: string;
-	lastName: string;
-	permanentAddress: string;
-	age: number;
-	birthdate: string;
-	emergencyContact: string;
-	role: string;
-	createdAt: string;
-};
+import type { User } from '../user-management/page';
 
 type UserTableProps = {
 	users: User[];
@@ -22,7 +9,20 @@ type UserTableProps = {
 };
 
 export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
-	const columns = users.length > 0 ? Object.keys(users[0]) : [];
+	const columns = [
+		'#',
+		'email',
+		'firstName',
+		'middleName',
+		'lastName',
+		'permanentAddress',
+		'age',
+		'birthDate',
+		'emergencyContactName',
+		'emergencyContactDetails',
+		'phoneNumber',
+		'role',
+	];
 
 	return (
 		<div className='w-full overflow-x-auto'>
@@ -32,11 +32,12 @@ export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
 						{columns.map((col) => (
 							<th
 								key={col}
-								className='px-4 py-2 text-left font-semibold capitalize border-b border-gray-300'>
-								{col.replace(/([A-Z])/g, ' $1')}
+								className={`px-2 py-2 font-semibold capitalize border-b border-gray-300 whitespace-normal break-words ${col === 'email' ? 'text-left' : 'text-center'}`}
+							>
+								{col === '#' ? '#' : col.replace(/([A-Z])/g, ' $1')}
 							</th>
 						))}
-						<th className='px-4 py-2 text-left font-semibold border-b border-gray-300'>
+						<th className='px-2 py-2 text-center font-semibold border-b border-gray-300 whitespace-normal break-words'>
 							Actions
 						</th>
 					</tr>
@@ -50,8 +51,12 @@ export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
 							{columns.map((col) => (
 								<td
 									key={col}
-									className='px-4 py-2 border-t border-gray-200'>
-									{user[col as keyof User]}
+									className={`px-2 py-2 border-t border-gray-200 whitespace-normal break-words ${col === 'email' ? 'text-left' : 'text-center'}`}
+								>
+									{col === '#' ? idx + 1 :
+									 col === 'birthDate' && user.birthDate ?
+									   new Date(user.birthDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) :
+									 user[col as keyof typeof user]}
 								</td>
 							))}
 							<td className='px-4 py-2 border-t border-gray-200 flex gap-2'>

@@ -1,18 +1,34 @@
 'use client';
-import { useState } from 'react';
-import UserFormModal, { UserFormData } from '../components/user-form-modal';
+import { useEffect, useState } from 'react';
+import UserFormModal from '../components/user-form-modal';
 import UserTable from '../components/user-table';
 import UserConfirmationDeleteModal from '../components/user-confirmation-delete-modal';
 import ProtectedRoute from '@/app/universal-components/protected-route';
 
-type User = UserFormData & { id: number; createdAt: string };
+// Unified User type matching backend
+export type User = {
+	id: string;
+	email: string;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	permanentAddress?: string;
+	age?: number;
+	birthDate?: string;
+	emergencyContactName?: string;
+	emergencyContactDetails?: string;
+	phoneNumber?: string;
+	role: 'RESIDENT' | 'RESCUER' | 'ADMIN';
+	createdAt?: string;
+};
 
-const tabs = ['residents', 'rescuer', 'admin'] as const;
+export type UserFormData = Omit<User, 'id' | 'createdAt'>;
+
+const tabs = ['RESIDENT', 'RESCUER', 'ADMIN'] as const;
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export default function UsersPage() {
-	const [activeTab, setActiveTab] = useState<(typeof tabs)[number] | 'all'>(
-		'all'
-	);
+	const [activeTab, setActiveTab] = useState<(typeof tabs)[number] | 'all'>('all');
 	const [showModal, setShowModal] = useState(false);
 	const [mode, setMode] = useState<'add' | 'edit'>('add');
 	const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -20,56 +36,29 @@ export default function UsersPage() {
 	const [deleteUser, setDeleteUser] = useState<User | null>(null);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-	const [users, setUsers] = useState<User[]>([
-		{
-			id: 1,
-			email: 'juan@mail.com',
-			firstName: 'Juan',
-			middleName: 'D.',
-			lastName: 'Santos',
-			permanentAddress: 'QC',
-			age: 30,
-			birthdate: '1995-01-01',
-			emergencyContact: '09171234567',
-			role: 'resident',
-			createdAt: '2025-11-26',
-		},
-		{
-			id: 2,
-			email: 'mark@mail.com',
-			firstName: 'Mark',
-			middleName: 'L.',
-			lastName: 'Reyes',
-			permanentAddress: 'Manila',
-			age: 28,
-			birthdate: '1997-03-15',
-			emergencyContact: '09179876543',
-			role: 'rescuer',
-			createdAt: '2025-11-26',
-		},
-		{
-			id: 3,
-			email: 'admin@mail.com',
-			firstName: 'Admin',
-			middleName: 'A.',
-			lastName: 'One',
-			permanentAddress: 'Cebu',
-			age: 35,
-			birthdate: '1990-06-20',
-			emergencyContact: '09170001111',
-			role: 'admin',
-			createdAt: '2025-11-26',
-		},
-	]);
+	const [users, setUsers] = useState<User[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const query = `query { getUsers { id email firstName middleName lastName permanentAddress age birthDate emergencyContactName emergencyContactDetails phoneNumber role createdAt } }`;
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query }),
+			});
+			const data = await res.json();
+			setUsers(data.data?.getUsers || []);
+			setLoading(false);
+		};
+		fetchUsers();
+	}, []);
 
 	// Filtered users
 	const displayedUsers =
 		activeTab === 'all'
 			? users
-			: users.filter(
-					(user) =>
-						user.role === (activeTab === 'residents' ? 'resident' : activeTab)
-			  );
+			: users.filter((user) => user.role === activeTab);
 
 	// Add User
 	const handleAddClick = () => {
@@ -91,10 +80,64 @@ export default function UsersPage() {
 		setShowDeleteModal(true);
 	};
 
+	// Helper to refetch users after mutation
+	const refetchUsers = async () => {
+		const query = `query { getUsers { id email firstName middleName lastName permanentAddress age birthDate emergencyContactName emergencyContactDetails phoneNumber role createdAt } }`;
+		const res = await fetch(GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query }),
+		});
+		const data = await res.json();
+		setUsers(data.data?.getUsers || []);
+	};
+
+	// Submit from modal
+	const handleSubmit = async (data: UserFormData) => {
+		if (mode === 'add') {
+			const mutation = `mutation CreateUser($input: CreateUserInput!) {\n  createUser(input: $input) { id }\n}`;
+			const variables = {
+				input: {
+					...data,
+					age: data.age ? Number(data.age) : null,
+				}
+			};
+			await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query: mutation, variables })
+			});
+			await refetchUsers();
+		} else if (mode === 'edit' && editingUser) {
+			const mutation = `mutation UpdateUser($input: UpdateUserInput!) {\n  updateUser(input: $input) { id }\n}`;
+			const variables = {
+				input: {
+					id: editingUser.id,
+					...data,
+					age: data.age ? Number(data.age) : null,
+				}
+			};
+			await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query: mutation, variables })
+			});
+			await refetchUsers();
+		}
+		setShowModal(false);
+	};
+
 	// Confirm Delete
-	const confirmDelete = () => {
+	const confirmDelete = async () => {
 		if (deleteUser) {
-			setUsers(users.filter((u) => u.id !== deleteUser.id));
+			const mutation = `mutation DeleteUser($id: ID!) {\n  deleteUser(id: $id)\n}`;
+			const variables = { id: deleteUser.id };
+			await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query: mutation, variables })
+			});
+			await refetchUsers();
 			setDeleteUser(null);
 			setShowDeleteModal(false);
 		}
@@ -106,22 +149,7 @@ export default function UsersPage() {
 		setShowDeleteModal(false);
 	};
 
-	// Submit from modal
-	const handleSubmit = (data: UserFormData) => {
-		if (mode === 'add') {
-			const newUser: User = {
-				...data,
-				id: Date.now(),
-				createdAt: new Date().toISOString(),
-			};
-			setUsers([...users, newUser]);
-		} else if (mode === 'edit' && editingUser) {
-			setUsers(
-				users.map((u) => (u.id === editingUser.id ? { ...u, ...data } : u))
-			);
-		}
-		setShowModal(false);
-	};
+	if (loading) return <div>Loading users...</div>;
 
 	return (
 		<ProtectedRoute roles={['ADMIN']}>
@@ -158,7 +186,7 @@ export default function UsersPage() {
 				<div className='flex justify-end mb-4'>
 					<button
 						onClick={handleAddClick}
-						className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
+						className='bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700'>
 						Add User
 					</button>
 				</div>
@@ -172,13 +200,21 @@ export default function UsersPage() {
 				{showModal && (
 					<UserFormModal
 						mode={mode}
-						initialData={editingUser ?? undefined}
+						initialData={editingUser ? {
+							email: editingUser.email,
+							firstName: editingUser.firstName,
+							middleName: editingUser.middleName || '',
+							lastName: editingUser.lastName,
+							permanentAddress: editingUser.permanentAddress || '',
+							age: editingUser.age || 0,
+							birthDate: editingUser.birthDate || '',
+							emergencyContactName: editingUser.emergencyContactName || '',
+							emergencyContactDetails: editingUser.emergencyContactDetails || '',
+							phoneNumber: editingUser.phoneNumber || '',
+							role: editingUser.role,
+						} : undefined}
 						onSubmit={handleSubmit}
-						onDelete={
-							mode === 'edit'
-								? () => handleDeleteClick(editingUser!)
-								: undefined
-						}
+						onDelete={mode === 'edit' ? () => handleDeleteClick(editingUser!) : undefined}
 						onCancel={() => setShowModal(false)}
 					/>
 				)}
