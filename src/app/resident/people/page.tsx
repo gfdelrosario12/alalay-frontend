@@ -15,7 +15,7 @@ export default function RescuerPeople() {
 
 	return (
 		<>
-			<ProtectedRoute roles={['resident']}>
+			<ProtectedRoute roles={['RESIDENT']}>
 				{' '}
 				{/* Header for the People Page */}
 				<Header
@@ -96,7 +96,7 @@ export default function RescuerPeople() {
 					</div>
 
 					{/* Navigation Bar */}
-					<AlalayNavigation role='resident' />
+					<AlalayNavigation role='RESIDENT' />
 				</div>
 				{/* Add Contact Modal */}
 				<AddContactModal

@@ -51,7 +51,7 @@ export default function RescueTasksPage() {
 	};
 
 	return (
-		<ProtectedRoute roles={['admin']}>
+		<ProtectedRoute roles={['ADMIN']}>
 			<div className='p-4 md:p-6 lg:p-3'>
 				<h1 className='text-2xl font-bold mb-6'>Rescue Tasks Management</h1>
 

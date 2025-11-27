@@ -10,7 +10,7 @@ import Image from 'next/image';
 export default function RescuerLogs() {
 	return (
 		<>
-			<ProtectedRoute roles={['rescuer']}>
+			<ProtectedRoute roles={['RESCUER']}>
 				{/* Header for the Logs */}
 				<Header
 					title='Resident Logs'
@@ -60,7 +60,7 @@ export default function RescuerLogs() {
 					</div>
 				</div>
 				{/* Navigation Bar */}
-				<AlalayNavigation role='rescuer' />
+				<AlalayNavigation role='RESCUER' />
 			</ProtectedRoute>
 		</>
 	);

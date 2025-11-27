@@ -29,7 +29,7 @@ export default function SettingsPage() {
 	};
 
 	return (
-		<ProtectedRoute roles={['admin']}>
+		<ProtectedRoute roles={['ADMIN']}>
 			<div>
 				<h1 className='text-2xl font-bold mb-6'>Settings</h1>
 

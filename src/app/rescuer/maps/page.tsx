@@ -17,7 +17,7 @@ const MapComponent = dynamic(
 export default function RescuerMap() {
 	return (
 		<>
-			<ProtectedRoute roles={['rescuer']}>
+			<ProtectedRoute roles={['RESCUER']}>
 				<div className='rescuer-map-container'>
 					{/* Header for the Maps */}
 					<Header
@@ -29,11 +29,11 @@ export default function RescuerMap() {
 					/>
 					{/* Placeholder for now */}
 
-					<MapComponent role='rescuer' />
+					<MapComponent role='RESCUER' />
 					<RescuerMapStatus />
 
 					{/* Navigation Bar */}
-					<AlalayNavigation role='rescuer' />
+					<AlalayNavigation role='RESCUER' />
 				</div>
 			</ProtectedRoute>
 		</>

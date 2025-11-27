@@ -34,11 +34,15 @@ export interface Resident {
 	residentLocation: LatLngExpression;
 }
 
-interface MapComponentProps {
-	role: 'resident' | 'rescuer';
+export interface MapComponentProps {
+	role: 'RESIDENT' | 'RESCUER';
+	currentLocation?: { lat: number; lng: number } | null;
 }
 
-export default function MapComponent({ role }: MapComponentProps) {
+export default function MapComponent({
+	role,
+	currentLocation,
+}: MapComponentProps) {
 	const [position, setPosition] = useState<LatLngExpression | null>(null);
 	const [permissionDenied, setPermissionDenied] = useState(false);
 	const [loading, setLoading] = useState(true);
@@ -81,6 +85,12 @@ export default function MapComponent({ role }: MapComponentProps) {
 	];
 
 	useEffect(() => {
+		if (currentLocation) {
+			setPosition([currentLocation.lat, currentLocation.lng]);
+			setPermissionDenied(false);
+			setLoading(false);
+			return;
+		}
 		const fetchLocation = async () => {
 			if (!navigator.geolocation) {
 				setPermissionDenied(true);
@@ -103,7 +113,7 @@ export default function MapComponent({ role }: MapComponentProps) {
 		};
 
 		setTimeout(fetchLocation, 0);
-	}, []);
+	}, [currentLocation]);
 
 	const retryLocation = () => {
 		setLoading(true);
@@ -146,8 +156,10 @@ export default function MapComponent({ role }: MapComponentProps) {
 			</div>
 		);
 
-	const mapCenter = position || [14.5995, 120.9842]; // fallback: Manila
-	const markers = role === 'rescuer' ? allResidents : friends;
+	const mapCenter: [number, number] = position
+		? (position as [number, number])
+		: [14.5995, 120.9842]; // fallback: Manila
+	const markers = role === 'RESCUER' ? allResidents : friends;
 
 	return (
 		<div className='h-[72vh] fixed top-[18vh] left-0 w-full z-0 mb-[-5vh]'>

@@ -9,7 +9,7 @@ import ProtectedRoute from '@/app/universal-components/protected-route';
 export default function RescuerNews() {
 	return (
 		<>
-			<ProtectedRoute roles={['rescuer']}>
+			<ProtectedRoute roles={['RESCUER']}>
 				{/* Header for the News */}
 				<Header
 					title='Current Happenings'
@@ -81,7 +81,7 @@ export default function RescuerNews() {
 					</div>
 				</div>
 				{/* Navigation Bar */}
-				<AlalayNavigation role='rescuer' />
+				<AlalayNavigation role='RESCUER' />
 			</ProtectedRoute>
 		</>
 	);
