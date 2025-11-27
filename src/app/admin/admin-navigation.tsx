@@ -19,6 +19,8 @@ export default function AdminNavigation() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleLogout = () => {
+		localStorage.removeItem('token');
+		localStorage.removeItem('alalay_user');
 		router.push('/login');
 	};
 
