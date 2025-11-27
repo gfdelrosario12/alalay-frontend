@@ -1,76 +1,78 @@
 'use client';
-import { useState } from 'react';
-import RescueTaskTable from '../components/rescues-table';
-import RescueTaskFormModal, {
-	RescueTaskFormData,
-} from '../components/rescues-form-modal';
-import { RescueTask } from '../components/rescues-form-modal';
+import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/app/universal-components/protected-route';
 
+const STATUS_OPTIONS = ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED'];
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
+
 export default function RescueTasksPage() {
-	const [tasks, setTasks] = useState<RescueTask[]>([
-		{
-			id: 1,
-			incidentId: 1,
-			assignedRescuerId: 201,
-			assignedDateTime: '2025-11-26T09:00',
-			status: 'In Progress',
-			completionDateTime: '',
-			notes: 'Evacuating 5 families from flood zone.',
-		},
-		{
-			id: 2,
-			incidentId: 2,
-			assignedRescuerId: 202,
-			assignedDateTime: '2025-11-25T16:00',
-			status: 'Pending',
-			completionDateTime: '',
-			notes: 'Inspecting earthquake-damaged homes.',
-		},
-		{
-			id: 3,
-			incidentId: 3,
-			assignedRescuerId: 203,
-			assignedDateTime: '2025-11-26T11:00',
-			status: 'Completed',
-			completionDateTime: '2025-11-26T13:30',
-			notes: 'Restored electricity to 3 households using emergency generator.',
-		},
-	]);
-	const [showModal, setShowModal] = useState(false);
+	const [tasks, setTasks] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [status, setStatus] = useState('PENDING');
 
-	const handleAddClick = () => setShowModal(true);
-
-	const handleSubmit = (data: RescueTaskFormData) => {
-		const newTask: RescueTask = {
-			...data,
-			id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
-		};
-		setTasks([...tasks, newTask]);
-		setShowModal(false);
+	const fetchTasks = async (selectedStatus: string) => {
+		console.log('Fetching rescue tasks for status:', selectedStatus);
+		const start = Date.now();
+		const query = `query RescueTasks($status: OtherStatus) { rescueTasks(status: $status) { id incidentId rescuerId notes status completionDatetime } }`;
+		const variables = { status: selectedStatus };
+		const res = await fetch(GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query, variables }),
+		});
+		const data = await res.json();
+		setTasks(data.data?.rescueTasks || []);
+		setLoading(false);
+		console.log('Fetched rescue tasks in', Date.now() - start, 'ms:', data);
 	};
+
+	useEffect(() => {
+		setLoading(true);
+		fetchTasks(status);
+	}, [status]);
+
+	if (loading) return <div>Loading rescue tasks...</div>;
 
 	return (
 		<ProtectedRoute roles={['ADMIN']}>
 			<div className='p-4 md:p-6 lg:p-3'>
 				<h1 className='text-2xl font-bold mb-6'>Rescue Tasks Management</h1>
-
-				<div className='flex justify-end mb-4'>
-					<button
-						onClick={handleAddClick}
-						className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
-						Add Rescue Task
-					</button>
+				<div className='mb-4'>
+					<label className='mr-2 font-semibold'>Status:</label>
+					<select
+						value={status}
+						onChange={e => setStatus(e.target.value)}
+						className='border p-2 rounded'
+					>
+						{STATUS_OPTIONS.map(opt => (
+							<option key={opt} value={opt}>{opt}</option>
+						))}
+					</select>
 				</div>
-
-				<RescueTaskTable tasks={tasks} />
-
-				{showModal && (
-					<RescueTaskFormModal
-						onSubmit={handleSubmit}
-						onCancel={() => setShowModal(false)}
-					/>
-				)}
+				<table className='min-w-full bg-white rounded shadow'>
+					<thead>
+						<tr>
+							<th className='px-4 py-2 text-center'>#</th>
+							<th className='px-4 py-2 text-center'>Incident ID</th>
+							<th className='px-4 py-2 text-center'>Rescuer ID</th>
+							<th className='px-4 py-2 text-center'>Notes</th>
+							<th className='px-4 py-2 text-center'>Status</th>
+							<th className='px-4 py-2 text-center'>Completion Datetime</th>
+						</tr>
+					</thead>
+					<tbody>
+						{tasks.map((t, idx) => (
+							<tr key={t.id} className='hover:bg-gray-50'>
+								<td className='px-4 py-2 text-center'>{idx + 1}</td>
+								<td className='px-4 py-2 text-center'>{t.incidentId}</td>
+								<td className='px-4 py-2 text-center'>{t.rescuerId}</td>
+								<td className='px-4 py-2 text-center'>{t.notes || '-'}</td>
+								<td className='px-4 py-2 text-center'>{t.status}</td>
+								<td className='px-4 py-2 text-center'>{t.completionDatetime ? new Date(t.completionDatetime).toLocaleString() : '-'}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
 			</div>
 		</ProtectedRoute>
 	);
