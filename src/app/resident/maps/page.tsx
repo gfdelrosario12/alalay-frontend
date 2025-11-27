@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import ResidentMapStatus from '@/app/resident-components/maps/resident-map-status';
 import ProtectedRoute from '@/app/universal-components/protected-route';
 import { useEffect, useState } from 'react';
-import { getUser, getToken } from '@/utils/auth';
+import { getUser, getToken } from '../../context/auth';
 
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 const MapComponent = dynamic(
@@ -19,6 +19,7 @@ const MapComponent = dynamic(
 
 export default function RescuerMap() {
 	const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+	const [friends, setFriends] = useState<any[]>([]);
 
 	useEffect(() => {
 		const user = getUser();
@@ -48,6 +49,43 @@ export default function RescuerMap() {
 		return () => clearInterval(interval);
 	}, []);
 
+	useEffect(() => {
+		const user = getUser();
+		if (!user || !user.id) return;
+
+		// Fetch bookmarked users (friends)
+		const fetchFriends = async () => {
+			const query = `query BookmarkedUsers($userId: ID!) {\n  bookmarkedUsers(userId: $userId) {\n    id\n    firstName\n    lastName\n    currentLatitude\n    currentLongitude\n    role\n    email\n    phoneNumber\n    permanentAddress\n    age\n    birthDate\n    emergencyContactName\n    emergencyContactDetails\n    createdAt\n  }\n}`;
+			const variables = { userId: user.id };
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query, variables })
+			});
+			const data = await res.json();
+			if (data.data && data.data.bookmarkedUsers) {
+				setFriends(
+					data.data.bookmarkedUsers.map((u: any) => ({
+						residentName: `${u.firstName || ''} ${u.lastName || ''}`.trim(),
+						residentStatus: 'safe', // You can update this if you have status info
+						residentLocation: [u.currentLatitude, u.currentLongitude],
+						id: u.id,
+						email: u.email,
+						role: u.role,
+						phoneNumber: u.phoneNumber,
+						permanentAddress: u.permanentAddress,
+						age: u.age,
+						birthDate: u.birthDate,
+						emergencyContactName: u.emergencyContactName,
+						emergencyContactDetails: u.emergencyContactDetails,
+						createdAt: u.createdAt,
+					}))
+				);
+			}
+		};
+		fetchFriends();
+	}, []);
+
 	const user = getUser();
 	const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'Juan';
 
@@ -63,7 +101,6 @@ export default function RescuerMap() {
 		<>
 			<ProtectedRoute roles={['RESIDENT']}>
 				<div className='resident-map-container'>
-					{/* Header for the Maps */}
 					<Header
 						title={`Welcome, ${displayName}!`}
 						subtitle='How are you today?'
@@ -71,13 +108,11 @@ export default function RescuerMap() {
 						time={timeStr}
 						image='/images/header-icon.jpg'
 					/>
-					{/* Placeholder for now */}
 
-					<MapComponent role='RESIDENT' currentLocation={currentLocation} />
+					<MapComponent role='RESIDENT' currentLocation={currentLocation} friends={friends} />
 					<ResidentMapStatus />
 
-					{/* Navigation Bar */}
-					<AlalayNavigation role='RESIDENT' />
+					<AlalayNavigation role='resident' />
 				</div>
 			</ProtectedRoute>
 		</>

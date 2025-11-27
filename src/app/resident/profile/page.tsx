@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import AlalayNavigation from '../../universal-components/alalay-navigation';
@@ -16,26 +16,59 @@ import editName from '../../../../public/images/universal-icons/profile-link-ico
 import editPassword from '../../../../public/images/universal-icons/profile-link-icons/password.png';
 
 import ProtectedRoute from '@/app/universal-components/protected-route';
+import { useAuth } from '@/app/context/auth';
+
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export default function RescuerProfile() {
 	const [activeModal, setActiveModal] = useState<string | null>(null);
 	const router = useRouter();
+	const { user: sessionUser, logout } = useAuth();
+	const [user, setUser] = useState<any>(null);
+
+	useEffect(() => {
+		if (!sessionUser || !sessionUser.id) return;
+		const fetchUser = async () => {
+			const query = `query GetUser($id: ID!) {\n  user(id: $id) {\n    id\n    email\n    firstName\n    middleName\n    lastName\n    permanentAddress\n    age\n    birthDate\n    emergencyContactName\n    emergencyContactDetails\n    phoneNumber\n    currentLatitude\n    currentLongitude\n    role\n    createdAt\n  }\n}`;
+			const variables = { id: sessionUser.id };
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query, variables })
+			});
+			const data = await res.json();
+			if (data.data && data.data.user) {
+				setUser(data.data.user);
+			}
+		};
+		fetchUser();
+	}, [sessionUser]);
 
 	const handleLogout = () => {
-		localStorage.removeItem('user');
+		logout();
 		router.push('/login');
 	};
 
+	const displayUser = user || sessionUser;
+
+	// Only render one modal child at a time
+	let modalChild: React.ReactElement | null = null;
+	if (activeModal === 'edit') {
+		modalChild = <EditProfileForm />;
+	} else if (activeModal === 'password') {
+		modalChild = <ChangePasswordForm />;
+	}
+
 	return (
 		<>
-			<ProtectedRoute roles={['resident']}>
+			<ProtectedRoute roles={['RESIDENT']}>
 				{/* Header for the Profile */}
 				<ProfileHeader
-					role='resident'
-					username='Juan A. Dela Cruz'
-					city='Quezon City'
-					residentId='R12345'
-					rescuerId='S67890'
+					role={displayUser?.role?.toLowerCase() || 'resident'}
+					username={displayUser ? `${displayUser.firstName || ''} ${displayUser.lastName || ''}`.trim() : ''}
+					city={displayUser?.permanentAddress || ''}
+					residentId={displayUser?.id || ''}
+					rescuerId={displayUser?.id || ''}
 					image='/images/header-icon.jpg'
 				/>
 				<div className='resident-profile-container'>
@@ -66,9 +99,9 @@ export default function RescuerProfile() {
 				<EditModalForm
 					isOpen={!!activeModal}
 					title={activeModal === 'edit' ? 'Edit Profile' : 'Change Password'}
-					onClose={() => setActiveModal(null)}>
-					{activeModal === 'edit' && <EditProfileForm />}
-					{activeModal === 'password' && <ChangePasswordForm />}
+					onClose={() => setActiveModal(null)}
+				>
+					{modalChild || <></>}
 				</EditModalForm>
 			</ProtectedRoute>
 		</>

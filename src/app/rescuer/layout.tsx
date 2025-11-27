@@ -11,7 +11,7 @@ export default function RescuerLayout({
 	const { setRole } = useRoleTheme();
 
 	useEffect(() => {
-		setRole('rescuer');
+		setRole('RESCUER');
 	}, [setRole]);
 
 	return <>{children}</>;

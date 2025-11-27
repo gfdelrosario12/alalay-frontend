@@ -81,7 +81,7 @@ export default function RescuerNews() {
 					</div>
 				</div>
 				{/* Navigation Bar */}
-				<AlalayNavigation role='RESCUER' />
+				<AlalayNavigation role='rescuer' />
 			</ProtectedRoute>
 		</>
 	);

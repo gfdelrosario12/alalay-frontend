@@ -46,7 +46,7 @@ export default function Login() {
 					router.push('/admin/dashboard');
 					break;
 				case 'RESCUER':
-					router.push('/res	cuer/maps');
+					router.push('/rescuer/maps');
 					break;
 				case 'RESIDENT':
 				default:

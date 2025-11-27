@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import '../universal-styles/alalay-navigation.css';
 
 type AlalayNavigationProps = {
-	role: 'RESIDENT' | 'RESCUER';
+	role: 'resident' | 'rescuer';
 };
 
 export default function AlalayNavigation({ role }: AlalayNavigationProps) {
@@ -25,7 +25,7 @@ export default function AlalayNavigation({ role }: AlalayNavigationProps) {
 			icon: 'news',
 		},
 		// Only show People for residents
-		...(role === 'RESIDENT'
+		...(role === 'resident'
 			? [
 					{
 						label: 'People',
@@ -35,7 +35,7 @@ export default function AlalayNavigation({ role }: AlalayNavigationProps) {
 			  ]
 			: []),
 		// Only show Tasks for rescuers
-		...(role === 'RESCUER'
+		...(role === 'rescuer'
 			? [
 					{
 						label: 'Tasks',

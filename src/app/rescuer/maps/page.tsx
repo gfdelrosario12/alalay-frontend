@@ -33,7 +33,7 @@ export default function RescuerMap() {
 					<RescuerMapStatus />
 
 					{/* Navigation Bar */}
-					<AlalayNavigation role='RESCUER' />
+					<AlalayNavigation role='rescuer' />
 				</div>
 			</ProtectedRoute>
 		</>

@@ -1,7 +1,48 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { AuthUser } from '@/utils/auth';
+
+// --- Types ---
+export type Role = 'RESIDENT' | 'RESCUER' | 'ADMIN';
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  permanentAddress?: string;
+  age?: number;
+  birthDate?: string;
+  emergencyContactName?: string;
+  emergencyContactDetails?: string;
+  phoneNumber?: string;
+  role: Role;
+  currentLatitude?: number;
+  currentLongitude?: number;
+  createdAt?: string;
+};
+
+// --- Standalone utility functions (for non-React usage) ---
+export function getToken() {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('token');
+}
+
+export function getUser(): AuthUser | null {
+  if (typeof window === 'undefined') return null;
+  const user = localStorage.getItem('alalay_user');
+  return user ? (JSON.parse(user) as AuthUser) : null;
+}
+
+export function isAuthenticated() {
+  return !!getToken();
+}
+
+export function hasRole(role: string) {
+  const user = getUser();
+  return !!user && user.role === role;
+}
 
 type AuthContextType = {
 	user: AuthUser | null;
@@ -33,26 +74,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			console.log('[AuthProvider] No user found in localStorage.');
 		}
 	}, []);
-
-	const getToken = () => {
-		if (typeof window === 'undefined') return null;
-		return localStorage.getItem('token');
-	};
-
-	const getUser = () => {
-		if (typeof window === 'undefined') return null;
-		const stored = localStorage.getItem('alalay_user');
-		return stored ? (JSON.parse(stored) as AuthUser) : null;
-	};
-
-	const isAuthenticated = () => {
-		return !!getToken();
-	};
-
-	const hasRole = (role: string) => {
-		const u = getUser();
-		return !!u && u.role === role;
-	};
 
 	const login = (userData: AuthUser) => {
 		localStorage.setItem('alalay_user', JSON.stringify(userData));

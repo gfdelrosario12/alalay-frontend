@@ -10,7 +10,7 @@ export default function ResidentLayout({
 	const { setRole } = useRoleTheme();
 
 	useEffect(() => {
-		setRole('resident');
+		setRole('RESIDENT');
 	}, [setRole]);
 
 	return <>{children}</>;

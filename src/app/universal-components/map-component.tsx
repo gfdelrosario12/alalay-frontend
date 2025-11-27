@@ -37,11 +37,13 @@ export interface Resident {
 export interface MapComponentProps {
 	role: 'RESIDENT' | 'RESCUER';
 	currentLocation?: { lat: number; lng: number } | null;
+	friends?: Resident[];
 }
 
 export default function MapComponent({
 	role,
 	currentLocation,
+	friends = [],
 }: MapComponentProps) {
 	const [position, setPosition] = useState<LatLngExpression | null>(null);
 	const [permissionDenied, setPermissionDenied] = useState(false);
@@ -68,19 +70,6 @@ export default function MapComponent({
 			residentName: 'Anna Smith',
 			residentStatus: 'safe',
 			residentLocation: [14.64, 121.05],
-		},
-	];
-
-	const friends: Resident[] = [
-		{
-			residentName: 'Luke Chiang',
-			residentStatus: 'safe',
-			residentLocation: [14.6538, 121.0687],
-		},
-		{
-			residentName: 'Nicole Zefanya',
-			residentStatus: 'monitoring',
-			residentLocation: [14.6488, 121.0737],
 		},
 	];
 
@@ -159,7 +148,7 @@ export default function MapComponent({
 	const mapCenter: [number, number] = position
 		? (position as [number, number])
 		: [14.5995, 120.9842]; // fallback: Manila
-	const markers = role === 'RESCUER' ? allResidents : friends;
+	const markers = role === 'RESCUER' ? allResidents : friends.length > 0 ? friends : [];
 
 	return (
 		<div className='h-[72vh] fixed top-[18vh] left-0 w-full z-0 mb-[-5vh]'>

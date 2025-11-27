@@ -7,17 +7,38 @@ import PeopleCard from '@/app/universal-components/people-card';
 import AddContactModal from '@/app/resident-components/people/add-contact-modal';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/app/universal-components/protected-route';
+import { getUser } from '../../context/auth';
+
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export default function RescuerPeople() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [friends, setFriends] = useState<any[]>([]);
+
+	useEffect(() => {
+		const user = getUser();
+		if (!user || !user.id) return;
+		const fetchFriends = async () => {
+			const query = `query BookmarkedUsers($userId: ID!) {\n  bookmarkedUsers(userId: $userId) {\n    id\n    firstName\n    lastName\n    permanentAddress\n    currentLatitude\n    currentLongitude\n    role\n    email\n    phoneNumber\n    age\n    birthDate\n    emergencyContactName\n    emergencyContactDetails\n    createdAt\n  }\n}`;
+			const variables = { userId: user.id };
+			const res = await fetch(GRAPHQL_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query, variables })
+			});
+			const data = await res.json();
+			if (data.data && data.data.bookmarkedUsers) {
+				setFriends(data.data.bookmarkedUsers);
+			}
+		};
+		fetchFriends();
+	}, []);
 
 	return (
 		<>
 			<ProtectedRoute roles={['RESIDENT']}>
-				{' '}
-				{/* Header for the People Page */}
 				<Header
 					title='My People'
 					subtitle='Check-in on your love ones'
@@ -45,58 +66,21 @@ export default function RescuerPeople() {
 						</Link>
 					</div>
 					<div className='resident-people-cards'>
-						<PeopleCard
-							residentName='Luke Chiang'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='123123123'
-							residentStatus='Safe'
-						/>
-						<PeopleCard
-							residentName='Niki Zefanya'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='231231231'
-							residentStatus='Unsafe'
-						/>
-						<PeopleCard
-							residentName='Jeff Bernat'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='123143234'
-							residentStatus='Monitoring'
-						/>
-						<PeopleCard
-							residentName='Jeff Bernat'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='123143234'
-							residentStatus='Monitoring'
-						/>
-						<PeopleCard
-							residentName='Jeff Bernat'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='123143234'
-							residentStatus='Monitoring'
-						/>
-						<PeopleCard
-							residentName='Jeff Bernat'
-							residentAddress='123 Emilio St., Brgy. Kalipi, Quezon City'
-							barangay='Brgy. Kalipi'
-							residentAvatar='/images/header-icon.jpg'
-							residentId='123143234'
-							residentStatus='Monitoring'
-						/>
+						{friends.map(friend => (
+							<PeopleCard
+								key={friend.id}
+								residentName={`${friend.firstName || ''} ${friend.lastName || ''}`.trim()}
+								residentAddress={friend.permanentAddress || ''}
+								barangay={''}
+								residentAvatar='/images/header-icon.jpg'
+								residentId={friend.id}
+								residentStatus='Unknown'
+							/>
+						))}
 					</div>
 
 					{/* Navigation Bar */}
-					<AlalayNavigation role='RESIDENT' />
+					<AlalayNavigation role='resident' />
 				</div>
 				{/* Add Contact Modal */}
 				<AddContactModal

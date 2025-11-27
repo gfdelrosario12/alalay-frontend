@@ -60,7 +60,7 @@ export default function RescuerLogs() {
 					</div>
 				</div>
 				{/* Navigation Bar */}
-				<AlalayNavigation role='RESCUER' />
+				<AlalayNavigation role='rescuer' />
 			</ProtectedRoute>
 		</>
 	);
