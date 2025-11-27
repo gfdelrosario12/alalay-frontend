@@ -46,6 +46,8 @@ export default function RescuerProfile() {
 
 	const handleLogout = () => {
 		logout();
+		localStorage.removeItem('token');
+		localStorage.removeItem('alalay_user');
 		router.push('/login');
 	};
 
