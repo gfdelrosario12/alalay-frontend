@@ -23,17 +23,6 @@ export default function RescuerLogs() {
 				<div className='resident-logs-container'>
 					<div className='resident-logs-header'>
 						<p>All Status Logs</p>
-						<Link
-							href=''
-							className='filter'>
-							<p>Filter</p>
-							<Image
-								src='/images/universal-icons/filter.png'
-								alt='filter.png'
-								width={20}
-								height={20}
-							/>
-						</Link>
 					</div>
 					{/* Placeholder for now */}
 					<div className='logs'>

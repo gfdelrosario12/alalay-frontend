@@ -32,17 +32,6 @@ export default function RescuerPeople() {
 							className='add-contact-button'>
 							+ Add Contact
 						</button>
-						<Link
-							href=''
-							className='refresh'>
-							<p>Refresh</p>
-							<Image
-								src='/images/universal-icons/refresh.png'
-								alt='refresh.png'
-								width={20}
-								height={20}
-							/>
-						</Link>
 					</div>
 					<div className='resident-people-cards'>
 						<PeopleCard

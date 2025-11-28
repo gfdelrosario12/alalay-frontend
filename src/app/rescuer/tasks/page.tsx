@@ -76,17 +76,7 @@ export default function RescuerTasks() {
 				/>
 				<div className='rescuer-people-container'>
 					<div className='rescuer-people-link'>
-						<Link
-							href=''
-							className='refresh'>
-							<p>Refresh</p>
-							<Image
-								src='/images/universal-icons/refresh.png'
-								alt='refresh'
-								width={20}
-								height={20}
-							/>
-						</Link>
+						
 					</div>
 
 					<div className='rescuer-people-cards'>
